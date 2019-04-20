@@ -1,10 +1,15 @@
 package command;
 
 import client.FileManager;
+import client.FilesList;
 import command.Command;
+import common.ConsoleHelper;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public abstract class CommandClientOnly implements Command {
-    public FileManager getFileManager() throws Exception{
-        return new FileManager();
+    public FilesList getFilesList() throws Exception{
+        return new FilesList.ge;
     }
 }

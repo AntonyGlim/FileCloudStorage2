@@ -7,6 +7,7 @@ import common.ConsoleHelper;
  */
 public class CommandEXIT implements Command {
     public void execute() throws Exception {
+        //TODO save information
         ConsoleHelper.writeMessage("До встречи!");
     }
 }

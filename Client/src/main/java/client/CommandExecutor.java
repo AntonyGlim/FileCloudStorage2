@@ -15,4 +15,11 @@ public class CommandExecutor {
         allKnownCommandsMap.put(ClientOperation.EXIT, new CommandEXIT());
     }
 
+    private CommandExecutor() {
+    }
+
+    public static void execute(ClientOperation operation) throws Exception {
+        allKnownCommandsMap.get(operation).execute();
+    }
+
 }
