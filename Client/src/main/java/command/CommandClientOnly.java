@@ -10,6 +10,6 @@ import java.nio.file.Paths;
 
 public abstract class CommandClientOnly implements Command {
     public FilesList getFilesList() throws Exception{
-        return new FilesList.ge;
+        return FilesList.getFilesList();
     }
 }

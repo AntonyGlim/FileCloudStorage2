@@ -1,7 +1,9 @@
 package command;
 
 import client.FileManager;
+import client.FilesList;
 import common.ConsoleHelper;
+import exception.PathIsNotFoundException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,14 +13,14 @@ public class CommandADD extends CommandClientOnly {
         try {
             ConsoleHelper.writeMessage("Добавление нового файла в список файлов, для отправки на сервер.");
 
-            FileManager fileManager = getZipFileManager();
+            FilesList filesList = getFilesList();
 
             ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
             Path sourcePath = Paths.get(ConsoleHelper.readString());
 
-            zipFileManager.addFile(sourcePath);
+            filesList.addFile(sourcePath);
 
-            ConsoleHelper.writeMessage("Добавление в архив завершено.");
+            ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 
         } catch (PathIsNotFoundException e) {
             ConsoleHelper.writeMessage("Файл не был найден.");

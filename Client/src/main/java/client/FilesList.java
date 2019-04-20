@@ -24,8 +24,12 @@ public class FilesList {
 
     public void addFiles(List<Path> fileList){
         for (Path path : fileList) {
-            this.fileList.add(path);
+            addFile(path);
         }
+    }
+
+    public void addFile(Path file){
+        this.fileList.add(file);
     }
 
     public void removeFiles(List<Path> fileList){
