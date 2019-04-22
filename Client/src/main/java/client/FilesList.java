@@ -54,6 +54,10 @@ public class FilesList {
 
     }
 
+    public int size(){
+        return fileList.size();
+    }
+
     public List<FileProperties> getFileList() {
         return fileList;
     }
