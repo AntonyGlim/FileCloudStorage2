@@ -15,7 +15,7 @@ import java.util.List;
 public class FilesList {
 
     private static FilesList filesList;
-    private List<Path> fileList;
+    private List<FileProperties> fileList;
 
     private FilesList() {
         this.fileList = new ArrayList<>();
@@ -26,32 +26,39 @@ public class FilesList {
         return filesList;
     }
 
-    public void addFiles(List<Path> fileList) throws PathIsNotFoundException {
-        for (Path path : fileList) {
-            addFile(path);
+    public void addFiles(List<FileProperties> fileList) throws PathIsNotFoundException {
+        for (FileProperties fileProperty : fileList) {
+            addFile(fileProperty);
         }
     }
 
-    public void addFile(Path file) throws PathIsNotFoundException {
-        if(Files.notExists(file)){
+    public void addFile(FileProperties file) throws PathIsNotFoundException {
+        if(Files.notExists(file.getAbsolutePath())){
             throw new PathIsNotFoundException();
         } else {
             this.fileList.add(file);
         }
     }
 
-    public void removeFiles(List<Path> fileList){
-        for (Path path : fileList) {
-            if (this.fileList.contains(path))
-                this.fileList.remove(path);
+    public void removeFiles(List<FileProperties> fileList){
+        for (FileProperties fileProperty : fileList) {
+            if (this.fileList.contains(fileProperty))
+                this.fileList.remove(fileProperty);
         }
     }
 
-    public List<Path> getFileList() {
+    public void removeFile(FileProperties fileProperty){
+        if (this.fileList.contains(fileProperty))
+            this.fileList.remove(fileProperty);
+        //TODO else - "thear is not such file"
+
+    }
+
+    public List<FileProperties> getFileList() {
         return fileList;
     }
 
-    public void setFileList(List<Path> fileList) {
+    public void setFileList(List<FileProperties> fileList) {
         this.fileList = fileList;
     }
 }
