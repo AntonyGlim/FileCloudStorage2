@@ -6,6 +6,7 @@ import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,9 +18,10 @@ public class CommandADD extends CommandClientOnly {
             FilesList filesList = getFilesList();
 
             ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
+
             Path sourcePath = Paths.get(ConsoleHelper.readString());
-            FileProperties file = new FileProperties(sourcePath);
-            filesList.addFile(file);
+            if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
+            filesList.addFile(new FileProperties(sourcePath));
 
             ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 
