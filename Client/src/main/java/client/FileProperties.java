@@ -1,5 +1,7 @@
 package client;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 
@@ -16,11 +18,25 @@ public class FileProperties {
     private Path absolutePath;
     private Date timeWhenAdd;
 
+    /**
+     * Конструктор для извлечения файлов из БД
+     * @param name
+     * @param size
+     * @param absolutePath
+     * @param timeWhenAdd
+     */
     public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
+    }
+
+    public FileProperties(Path sourcePath) throws IOException {
+        this.name = sourcePath.getFileName().toString();
+        this.size = Files.size(sourcePath);
+        this.absolutePath = sourcePath;
+        this.timeWhenAdd = new Date();
     }
 
     public String getName() {

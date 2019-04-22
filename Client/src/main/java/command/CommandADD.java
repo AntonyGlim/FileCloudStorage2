@@ -1,6 +1,7 @@
 package command;
 
 import client.FileManager;
+import client.FileProperties;
 import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
@@ -17,8 +18,8 @@ public class CommandADD extends CommandClientOnly {
 
             ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
             Path sourcePath = Paths.get(ConsoleHelper.readString());
-
-            filesList.addFile(sourcePath);
+            FileProperties file = new FileProperties(sourcePath);
+            filesList.addFile(file);
 
             ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 

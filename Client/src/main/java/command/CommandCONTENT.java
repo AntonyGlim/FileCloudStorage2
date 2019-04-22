@@ -1,5 +1,6 @@
 package command;
 
+import client.FileProperties;
 import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
@@ -14,8 +15,8 @@ public class CommandCONTENT extends CommandClientOnly {
 
             FilesList filesList = getFilesList();
 
-            for (Path path : filesList.getFileList()) {
-                ConsoleHelper.writeMessage(path.toString());
+            for (FileProperties file : filesList.getFileList()) {
+                ConsoleHelper.writeMessage(file.toString());
             }
 
         } catch (PathIsNotFoundException e) {
