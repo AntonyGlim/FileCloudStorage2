@@ -44,16 +44,13 @@ public class FileProperties {
         // Строим красивую строку из свойств
         StringBuilder builder = new StringBuilder();
         builder.append(name);
-        if (size > 0) {
-            builder.append("\t");
-            builder.append(size / 1024);
-            builder.append(" Kb (");
-            builder.append(compressedSize / 1024);
-            builder.append(" Kb) сжатие: ");
-            builder.append(getCompressionRatio());
-            builder.append("%");
-        }
-
+        builder.append("\t");
+        builder.append(size / 1024);
+        builder.append(" Kb, ");
+        builder.append("absolute path: ");
+        builder.append(absolutePath);
+        builder.append(", when added: ");
+        builder.append(timeWhenAdd.getTime());
         return builder.toString();
     }
 }
