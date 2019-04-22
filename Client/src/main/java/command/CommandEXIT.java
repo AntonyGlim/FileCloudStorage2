@@ -1,22 +1,48 @@
 package command;
 
 import client.DBManager;
+import client.FileProperties;
+import client.FilesList;
 import common.ConsoleHelper;
+import exception.PathIsNotFoundException;
+
+import java.sql.SQLException;
 
 
 /**
  * The command is executed at the end of the program.
  */
-public class CommandEXIT implements Command {
+public class CommandEXIT extends CommandClientOnly {
 
     private static String tableName = "fileslist";
-    DBManager dbManager = new DBManager();
+
 
     public void execute() throws Exception {
-
         try {
-            dbManager.connect();
-            dbManager.deleteAllFromTable(tableName);
+            FilesList filesList = getFilesList();
+            DBManager dbManager = new DBManager();
+            try {
+                dbManager.connect();
+                dbManager.deleteAllFromTable(tableName);
+
+                for (FileProperties file : filesList.getFileList()) {
+                    dbManager.insertIntoTable(
+                            tableName,
+                            file.getName().toString(),
+                            file.getSize(),
+                            file.getAbsolutePath().toString(),
+                            file.getTimeWhenAdd().getTime()
+                            );
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                ConsoleHelper.writeMessage("Ошибка БД");
+            } finally {
+                dbManager.disconnect();
+
+            }
+        } catch (PathIsNotFoundException e) {
+            ConsoleHelper.writeMessage("Файл не был найден.");
         }
         ConsoleHelper.writeMessage("До встречи!");
     }

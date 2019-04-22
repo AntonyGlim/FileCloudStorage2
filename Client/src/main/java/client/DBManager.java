@@ -20,7 +20,7 @@ public class DBManager {
      */
     public static void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:database/files.db");
+        connection = DriverManager.getConnection("jdbc:sqlite:Client/src/main/java/database/files.db");
         statement = connection.createStatement();
     }
 
@@ -46,7 +46,7 @@ public class DBManager {
      */
     public static void insertIntoTable(String tableName, String name, long size, String absolutePath, long timeWhenAdd) throws SQLException {
         String sql = String.format("INSERT INTO %s (name, size, absolutePath, timeWhenAdd) " +
-                "VALUES (%s, '%d', %s, '%d');", tableName, name, size, absolutePath, timeWhenAdd);
+                "VALUES ('%s', '%d', '%s', '%d');", tableName, name, size, absolutePath, timeWhenAdd);
         statement.execute(sql);
     }
 
