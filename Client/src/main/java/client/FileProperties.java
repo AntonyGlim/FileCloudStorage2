@@ -26,12 +26,12 @@ public class FileProperties {
      * @param absolutePath
      * @param timeWhenAdd
      */
-    public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd, boolean fileExist) {
+    public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
-        this.fileExist = fileExist;
+        this.fileExist = true;
     }
 
     public FileProperties(Path sourcePath) throws IOException {
@@ -78,6 +78,8 @@ public class FileProperties {
         builder.append(absolutePath);
         builder.append(", when added: ");
         builder.append(timeWhenAdd.getTime());
+        builder.append(" file exist: ");
+        builder.append(isFileExist());
         return builder.toString();
     }
 }

@@ -54,9 +54,9 @@ public class FilesList {
      */
     public void addFileFromDB(FileProperties file) throws PathIsNotFoundException {
         if(Files.notExists(file.getAbsolutePath())){
-            //TODO указать в свойствах файла, что он не найден
-            this.fileList.add(file);
+            file.setFileExist(false);
         }
+        this.fileList.add(file);
     }
 
     public void removeFiles(List<FileProperties> fileList){

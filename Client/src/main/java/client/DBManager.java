@@ -67,16 +67,12 @@ public class DBManager {
         ResultSet rs = statement.executeQuery(sql);
         FilesList filesList = getFilesList();
         while (rs.next()){
-            filesList.addFile(new FileProperties(
+            filesList.addFileFromDB(new FileProperties(
                     rs.getString(2),
                     rs.getLong(3),
                     Paths.get(rs.getString(4)),
                     new Date(rs.getLong(5))
             ));
-            ConsoleHelper.writeMessage("file name:" + rs.getString(2));
-            ConsoleHelper.writeMessage(Long.toString(rs.getLong(3)));
-            ConsoleHelper.writeMessage(rs.getString(4));
-            ConsoleHelper.writeMessage(Long.toString(rs.getLong(5)));
         }
         disconnect();
         return filesList;
