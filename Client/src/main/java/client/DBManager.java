@@ -1,8 +1,14 @@
 package client;
 
+import exception.PathIsNotFoundException;
+
+import java.nio.file.Paths;
 import java.sql.*;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static client.FilesList.getFilesList;
 
 /**
  * Класс будет отвечать за работу с базой данных
@@ -49,6 +55,37 @@ public class DBManager {
                 "VALUES ('%s', '%d', '%s', '%d');", tableName, name, size, absolutePath, timeWhenAdd);
         statement.execute(sql);
     }
+
+    /**
+     * Метод вернет FilesList, который сформирует из БД.
+     * @param tableName
+     * @throws SQLException
+     */
+    public static FilesList returnFilesListFromDB(String tableName) throws SQLException, PathIsNotFoundException {
+        String sql = String.format("SELECT * FROM %s;", tableName);
+        ResultSet rs = statement.executeQuery(sql);
+        FilesList filesList = getFilesList();
+        while (rs.next()){
+            filesList.addFile(new FileProperties(
+                    rs.getString(1),
+                    rs.getLong(2),
+                    Paths.get(rs.getString(3)),
+                    new Date(rs.getLong(2))
+            ));
+        }
+        return filesList;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Метод удаляет все данные из таблицы - метод для отладки
@@ -98,27 +135,7 @@ public class DBManager {
         }
     }
 
-    /**
-     * Метод вернет строки из БД цена которых будет соответствовать ценовому диапазону.
-     * @param tableName
-     * @param lowerBorder - минимальная цена
-     * @param upperBorder - максимальная цена
-     * @throws SQLException
-     */
-    public static void returnFromDiapasonByCost(String tableName, int lowerBorder, int upperBorder) throws SQLException {
-        String sql = String.format("SELECT * FROM %s WHERE cost >= %d AND cost <= %d;", tableName, lowerBorder, upperBorder);
-        ResultSet rs = statement.executeQuery(sql);
-        System.out.printf("%6s", "id");                             //printf - для удобства восприятия информации
-        System.out.printf("%8s", "prodid");
-        System.out.printf("%12s", "title");
-        System.out.printf("%10s", "cost" + "\n");
-        while (rs.next()){
-            System.out.printf("%6d", rs.getInt(1));
-            System.out.printf("%8d", rs.getInt(2));
-            System.out.printf("%12s", rs.getString(3));
-            System.out.printf("%10s", (rs.getInt(4) + "\n"));
-        }
-    }
+
 
     /**
      * Метод проверит, является-ли строка введенная пользователем положительным числом
@@ -131,18 +148,4 @@ public class DBManager {
         return m.matches();
     }
 
-    /**
-     * Метод выведет на экран информацию о командах в приложении
-     */
-    private static void userInformation(){
-        System.out.println("Ознакомтесь с информацией для работы: ");
-        System.out.println("1.Чтобы узнать цену товара, введите ключевое слово \"цена\" и имя товара через пробел," +
-                "\nзатем нажмите Enter. Пример: \"цена Товар_456\";");
-        System.out.println("2.Чтобы изменить цену товара, введите ключевое слово \"сменитьцену\", имя товара через пробел " +
-                "\nи новую цену товара, затем нажмите Enter. Пример: \"сменитьцену Товар_456 55\"");
-        System.out.println("3.Чтобы получить список товаров из определенного ценового диапазона, " +
-                "\nвведите ключевое слово \"товарыпоцене\", минимальную и максимальную цену товара, " +
-                "\nзатем нажмите Enter. Пример: \"товарыпоцене 100 200\"");
-        System.out.println("4. Для выхода введите \"/q\")");
-    }
 }
