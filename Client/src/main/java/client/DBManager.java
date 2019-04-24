@@ -1,5 +1,6 @@
 package client;
 
+import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
 import java.nio.file.Paths;
@@ -60,18 +61,24 @@ public class DBManager {
      * Метод вернет FilesList, который сформирует из БД.
      * @throws SQLException
      */
-    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
+    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException, ClassNotFoundException {
+        connect();
         String sql = String.format("SELECT * FROM %s;", tableName);
         ResultSet rs = statement.executeQuery(sql);
         FilesList filesList = getFilesList();
         while (rs.next()){
             filesList.addFile(new FileProperties(
-                    rs.getString(1),
-                    rs.getLong(2),
-                    Paths.get(rs.getString(3)),
-                    new Date(rs.getLong(2))
+                    rs.getString(2),
+                    rs.getLong(3),
+                    Paths.get(rs.getString(4)),
+                    new Date(rs.getLong(5))
             ));
+            ConsoleHelper.writeMessage("file name:" + rs.getString(2));
+            ConsoleHelper.writeMessage(Long.toString(rs.getLong(3)));
+            ConsoleHelper.writeMessage(rs.getString(4));
+            ConsoleHelper.writeMessage(Long.toString(rs.getLong(5)));
         }
+        disconnect();
         return filesList;
     }
 
