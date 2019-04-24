@@ -17,8 +17,7 @@ import static client.FilesList.getFilesList;
 public class DBManager {
     private static Connection connection;
     private static Statement statement;
-    private static String tableName = "fileslist";                                                 //Имя таблицы вынесенео, для удобства
-    private static String[] tokens = {" ", " ", " ", " "};                                              //Костыль, который защищает программу от вылета, если пользователь введет не правильные запросы
+    private static String tableName = "fileslist";
 
     /**
      * Устанавливаем соединение с БД
@@ -44,110 +43,65 @@ public class DBManager {
 
     /**
      * Метод добавляет запись в таблицу
-     * @param tableName
      * @param name
      * @param size
      * @param absolutePath
      * @param timeWhenAdd
      * @throws SQLException
      */
-    public static void insertIntoTable(String tableName, String name, long size, String absolutePath, long timeWhenAdd) throws SQLException {
-        String sql = String.format("INSERT INTO %s (name, size, absolutePath, timeWhenAdd) " +
-                "VALUES ('%s', '%d', '%s', '%d');", tableName, name, size, absolutePath, timeWhenAdd);
-        statement.execute(sql);
+    public static void insertIntoTable(String name, long size, String absolutePath, long timeWhenAdd) throws SQLException {
+        try {
+            connect();
+            String sql = String.format("INSERT INTO %s (name, size, absolutePath, timeWhenAdd) " +
+                    "VALUES ('%s', '%d', '%s', '%d');", tableName, name, size, absolutePath, timeWhenAdd);
+            statement.execute(sql);
+        } catch (ClassNotFoundException e) {
+            ConsoleHelper.writeMessage("Ошибка при сохранении данных");
+        } finally {
+            disconnect();
+        }
     }
 
     /**
      * Метод вернет FilesList, который сформирует из БД.
      * @throws SQLException
      */
-    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException, ClassNotFoundException {
-        connect();
-        String sql = String.format("SELECT * FROM %s;", tableName);
-        ResultSet rs = statement.executeQuery(sql);
-        FilesList filesList = getFilesList();
-        while (rs.next()){
-            filesList.addFileFromDB(new FileProperties(
-                    rs.getString(2),
-                    rs.getLong(3),
-                    Paths.get(rs.getString(4)),
-                    new Date(rs.getLong(5))
-            ));
+    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
+        FilesList filesList = getFilesList();;
+        try {
+            connect();
+            String sql = String.format("SELECT * FROM %s;", tableName);
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()){
+                filesList.addFileFromDB(new FileProperties(
+                        rs.getString(2),
+                        rs.getLong(3),
+                        Paths.get(rs.getString(4)),
+                        new Date(rs.getLong(5))
+                ));
+            }
+        } catch (ClassNotFoundException e) {
+            ConsoleHelper.writeMessage("Ошибка при загрузке данных");
+        } finally {
+            disconnect();
         }
-        disconnect();
         return filesList;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * Метод удаляет все данные из таблицы - метод для отладки
-     * @param tableName
+     * Метод удаляет все данные из таблицы.
      * @throws SQLException
      */
-    public static void deleteAllFromTable(String tableName) throws SQLException {
-        String sql = String.format("DELETE FROM %s ", tableName);
-        statement.execute(sql);
-    }
-
-    /**
-     * Метод возвращает стоимость товара по его имени.
-     * Если ResultSet не будет иметь хотябы одного элемента
-     * Пользователь увидит сообщение, что товара с таким именем нет
-     * @param tableName
-     * @param titleToFined
-     * @throws SQLException
-     */
-    public static void returnCostByName(String tableName, String titleToFined) throws SQLException {
-        String sql = String.format("SELECT cost " +
-                "FROM %s WHERE title = '%s';", tableName, titleToFined);
-        ResultSet rs = statement.executeQuery(sql);
-        if (rs.next()) {
-            int cost = rs.getInt("cost");
-            System.out.println("Стоимость товара: " + cost + "р.");
-        } else {
-            System.out.println("Такого товара нет.");
+    public static void deleteAllFromTable() throws SQLException {
+        try {
+            connect();
+            String sql = String.format("DELETE FROM %s ", tableName);
+            statement.execute(sql);
+        } catch (ClassNotFoundException e) {
+            ConsoleHelper.writeMessage("Ошибка при работе с БД");
+        } finally {
+            disconnect();
         }
-    }
-
-    /**
-     * Метод обновит значение цены по имени.
-     * Если пользователь введет не существующее имя - вернется предупреждение
-     * @param tableName
-     * @param titleToUbdateCost
-     * @param newCost
-     * @throws SQLException
-     */
-    public static void updateCostByName(String tableName, String titleToUbdateCost, int newCost) throws SQLException {
-        String sql = String.format("UPDATE %s SET cost = '%d' WHERE title = '%s';", tableName, newCost, titleToUbdateCost);
-        int count = statement.executeUpdate(sql);
-        if (count > 0){
-            System.out.println("Стоимость " + titleToUbdateCost + " изменена.");
-        } else {
-            System.out.println("К сожалению, обновления не произошло! Проверьте имя товара.");
-        }
-    }
-
-
-
-    /**
-     * Метод проверит, является-ли строка введенная пользователем положительным числом
-     * @param str
-     * @return
-     */
-    private static boolean isValidNumber(String str){
-        Pattern p = Pattern.compile("\\d+");
-        Matcher m = p.matcher(str);
-        return m.matches();
     }
 
 }
