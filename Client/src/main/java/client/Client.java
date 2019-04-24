@@ -3,6 +3,10 @@ package client;
 import common.ConsoleHelper;
 
 import java.io.IOException;
+import java.nio.file.Files;
+
+import static client.DBManager.returnFilesListFromDB;
+import static client.FilesList.getFilesList;
 
 /**
  * Стартовый класс для клиента
@@ -12,6 +16,7 @@ public class Client {
     public static void main(String[] args) throws Exception {
 
         ClientOperation operation = null;
+        FilesList filesList = returnFilesListFromDB();
 
         do {
             operation = askOperation();

@@ -58,10 +58,9 @@ public class DBManager {
 
     /**
      * Метод вернет FilesList, который сформирует из БД.
-     * @param tableName
      * @throws SQLException
      */
-    public static FilesList returnFilesListFromDB(String tableName) throws SQLException, PathIsNotFoundException {
+    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
         String sql = String.format("SELECT * FROM %s;", tableName);
         ResultSet rs = statement.executeQuery(sql);
         FilesList filesList = getFilesList();
