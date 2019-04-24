@@ -32,10 +32,29 @@ public class FilesList {
         }
     }
 
+    /**
+     * Метод добавляет только существующие файлы
+     * @param file
+     * @throws PathIsNotFoundException
+     */
     public void addFile(FileProperties file) throws PathIsNotFoundException {
         if(Files.notExists(file.getAbsolutePath())){
             throw new PathIsNotFoundException();
         } else {
+            this.fileList.add(file);
+        }
+    }
+
+    /**
+     * Метод отличается от public void addFile(FileProperties file) тем,
+     * что добавляет все файлы из базы данных, не зависимо от того,
+     * найден-ли он на ПК или нет.
+     * @param file
+     * @throws PathIsNotFoundException
+     */
+    public void addFileFromDB(FileProperties file) throws PathIsNotFoundException {
+        if(Files.notExists(file.getAbsolutePath())){
+            //TODO указать в свойствах файла, что он не найден
             this.fileList.add(file);
         }
     }
