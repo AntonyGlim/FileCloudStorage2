@@ -17,6 +17,7 @@ public class FileProperties {
     private long size;
     private Path absolutePath;
     private Date timeWhenAdd;
+    private boolean fileExist;
 
     /**
      * Конструктор для извлечения файлов из БД
@@ -25,11 +26,12 @@ public class FileProperties {
      * @param absolutePath
      * @param timeWhenAdd
      */
-    public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
+    public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd, boolean fileExist) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
+        this.fileExist = fileExist;
     }
 
     public FileProperties(Path sourcePath) throws IOException {
@@ -37,6 +39,7 @@ public class FileProperties {
         this.size = Files.size(sourcePath);
         this.absolutePath = sourcePath;
         this.timeWhenAdd = new Date();
+        this.fileExist = true;
     }
 
     public String getName() {
@@ -53,6 +56,14 @@ public class FileProperties {
 
     public Date getTimeWhenAdd() {
         return timeWhenAdd;
+    }
+
+    public boolean isFileExist() {
+        return fileExist;
+    }
+
+    public void setFileExist(boolean fileExist) {
+        this.fileExist = fileExist;
     }
 
     @Override
