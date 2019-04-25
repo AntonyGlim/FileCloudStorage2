@@ -66,11 +66,15 @@ public class FilesList {
         }
     }
 
-    public void removeFile(FileProperties fileProperty){
-        if (this.fileList.contains(fileProperty))
-            this.fileList.remove(fileProperty);
-        //TODO else - "thear is not such file"
-
+    public void removeFile(Path sourcePath){
+        for (int i = 0; i < fileList.size(); i++) {
+            if (fileList.get(i).getAbsolutePath().equals(sourcePath)){
+                ConsoleHelper.writeMessage(String.format("Файл %s удален.", fileList.get(i).getAbsolutePath()));
+                fileList.remove(i);
+                return;
+            }
+        }
+        ConsoleHelper.writeMessage(String.format("Файл %s не найден.", sourcePath));
     }
 
     public int size(){
