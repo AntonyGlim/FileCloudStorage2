@@ -27,7 +27,7 @@ public class Server {
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(/*new DiscardServerHandler()*/);
+                            ch.pipeline().addLast(new DiscardServerHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)          // (5)
@@ -52,6 +52,6 @@ public class Server {
             port = Integer.parseInt(args[0]);
         }
 
-//        new DiscardServer(port).run();
+        new Server(port).run();
     }
 }
