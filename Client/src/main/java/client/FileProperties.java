@@ -82,4 +82,35 @@ public class FileProperties {
         builder.append(isFileExist());
         return builder.toString();
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+/*
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if ((o == null) || o.getClass() != this.getClass()) return false;
+        FileProperties fileProperties = (FileProperties) o;
+        if (!(o instanceof FileProperties)) return false;
+        return (name == fileProperties.name || (name != null && name.equals(fileProperties.name)))
+                && size == fileProperties.size
+                && (absolutePath == fileProperties.absolutePath || (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
+    }
+*/
+
+    /**
+     * Метод сравнивает только абсолютные пути к файлам
+     * @param o
+     * @return
+     */
+    public boolean equalsByAbsolutePath(Object o) {
+        if (o == this) return true;
+        if ((o == null) || o.getClass() != this.getClass()) return false;
+        FileProperties fileProperties = (FileProperties) o;
+        if (!(o instanceof FileProperties)) return false;
+        return (absolutePath == fileProperties.absolutePath ||
+                (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
+    }
 }
