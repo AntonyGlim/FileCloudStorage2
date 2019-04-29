@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
-
+//@example
 public class DiscardServerHandler extends ChannelInboundHandlerAdapter { //(1)
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {     //(2)
