@@ -1,6 +1,6 @@
 package client.client;
 
-import com.flamexander.netty.example.common.AbstractMessage;
+import common.common.AbstractMessage;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 

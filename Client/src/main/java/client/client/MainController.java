@@ -1,9 +1,9 @@
 package client.client;
 
-import com.flamexander.netty.example.client.protocol.NettyNetwork;
-import com.flamexander.netty.example.common.AbstractMessage;
-import com.flamexander.netty.example.common.FileMessage;
-import com.flamexander.netty.example.common.FileRequest;
+
+import common.common.AbstractMessage;
+import common.common.FileMessage;
+import common.common.FileRequest;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
