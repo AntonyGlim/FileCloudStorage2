@@ -1,4 +1,4 @@
-package common.common;
+package common;
 /**
  * Enum отвечает за тип сообщений пересылаемых между
  * клиентом и сервером.
