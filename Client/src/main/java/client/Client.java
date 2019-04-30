@@ -4,7 +4,13 @@ import common.ConsoleHelper;
 
 import java.io.IOException;
 import static client.DBManager.returnFilesListFromDB;
-
+/*
+TODO list:24.04.2019
+TODO Разобраться с датой (она должна корректно выводиться)
+TODO Реализовать команду removed
+TODO добавить список команд по работе с сервером
+1.
+ */
 /**
  * Стартовый класс для клиента
  */

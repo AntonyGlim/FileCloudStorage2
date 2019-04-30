@@ -5,9 +5,6 @@ import command.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Класс реализует паттерн Command
- */
 public class CommandExecutor {
     private static final Map<ClientOperation, Command> allKnownCommandsMap = new HashMap<ClientOperation, Command>();
 

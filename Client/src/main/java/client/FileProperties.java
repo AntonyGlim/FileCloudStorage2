@@ -10,7 +10,7 @@ import java.util.Date;
  * имя файла
  * размер файла
  * абсолютный путь
- * время добавления TODO - форматирование даты
+ * время добавления
  */
 public class FileProperties {
     private String name;
