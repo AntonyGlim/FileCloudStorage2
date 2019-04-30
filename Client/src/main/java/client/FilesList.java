@@ -53,9 +53,7 @@ public class FilesList {
      * @throws PathIsNotFoundException
      */
     public void addFileFromDB(FileProperties file) throws PathIsNotFoundException {
-        if(Files.notExists(file.getAbsolutePath())){
-            file.setFileExist(false);
-        }
+        setFileExistMethod(file);
         this.fileList.add(file);
     }
 
@@ -77,6 +75,13 @@ public class FilesList {
         ConsoleHelper.writeMessage(String.format("Файл %s не найден.", sourcePath));
     }
 
+    public void refreshList(){
+        for (FileProperties file : fileList) {
+            setFileExistMethod(file);
+        }
+
+    }
+
     public int size(){
         return fileList.size();
     }
@@ -87,5 +92,11 @@ public class FilesList {
 
     public void setFileList(List<FileProperties> fileList) {
         this.fileList = fileList;
+    }
+
+    private void setFileExistMethod(FileProperties file){
+        if(Files.notExists(file.getAbsolutePath())){
+            file.setFileExist(false);
+        }
     }
 }
