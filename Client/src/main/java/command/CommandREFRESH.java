@@ -13,5 +13,8 @@ public class CommandREFRESH extends CommandClientOnly  {
         filesList.refreshList();
 
         ConsoleHelper.writeMessage("Список файлов, для отправки на сервер обновлен.");
+
+        CommandCONTENT commandCONTENT = new CommandCONTENT();
+        commandCONTENT.execute();
     }
 }

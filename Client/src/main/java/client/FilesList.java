@@ -97,6 +97,8 @@ public class FilesList {
     private void setFileExistMethod(FileProperties file){
         if(Files.notExists(file.getAbsolutePath())){
             file.setFileExist(false);
+        } else {
+            file.setFileExist(true);
         }
     }
 }
