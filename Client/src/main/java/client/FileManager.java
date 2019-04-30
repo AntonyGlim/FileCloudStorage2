@@ -7,6 +7,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс работает с файлами и дирректориями
+ * TODO
+ */
 public class FileManager {
     private Path rootPath;
     private List<Path> fileList;
