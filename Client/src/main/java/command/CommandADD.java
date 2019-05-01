@@ -3,6 +3,7 @@ package command;
 import client.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
+import exception.FileAlreadyExistException;
 import exception.PathIsNotFoundException;
 
 import java.nio.file.Files;
@@ -26,6 +27,8 @@ public class CommandADD extends CommandClientOnly {
 
         } catch (PathIsNotFoundException e) {
             ConsoleHelper.writeMessage("Файл не был найден.");
+        } catch (FileAlreadyExistException e){
+            ConsoleHelper.writeMessage("Файл с таким именем уже добавлен в список");
         }
     }
 }
