@@ -7,12 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * В классе будут храниться данные о объекте
- * имя файла
- * размер файла
- * абсолютный путь
- * время добавления
- * существует-ли файл на диске в данный момент
+ * The class will store data about the object.
+ * file name
+ * file size
+ * absolute path
+ * add time
+ * Is there a file on the disk at the moment?
+ * TODO Delete Path - Serialization
  */
 public class FileProperties {
     private String name;
@@ -100,11 +101,18 @@ public class FileProperties {
         return builder.toString();
     }
 
+    /**
+     * Auxiliary method for more accurate output
+     * @param text
+     * @param lengthToChange
+     * @return
+     */
     private String changeStringLength(String text, int lengthToChange){
-        StringBuilder stringBuilder = new StringBuilder(text);
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = text.length(); i < lengthToChange; i++) {
             stringBuilder.append(" ");
         }
+        stringBuilder.append(text);
         return stringBuilder.toString();
     }
 }
