@@ -10,7 +10,7 @@ public class CommandREFRESH extends CommandClientOnly  {
 
         FilesListManager filesListManager = getFilesList();
 
-//        filesListManager.refreshList();
+        filesListManager.refreshFilesList();
 
         ConsoleHelper.writeMessage("Список файлов, для отправки на сервер обновлен.");
 

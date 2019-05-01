@@ -3,6 +3,7 @@ package client;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,8 @@ public class FilesListManager {
     }
 
     /**
-     * Метод добавляет только существующие файлы
+     * Add only if file exist
+     * Method for adding data with console
      * @param file
      * @throws PathIsNotFoundException
      */
@@ -39,8 +41,8 @@ public class FilesListManager {
     }
 
     /**
-     * Метод добавляет все файлы из базы данных,
-     * не зависимо от того, найден-ли он на ПК или нет.
+     * Add all files from DB,
+     * it`s does not matter if file exist or not
      * @param file
      * @throws PathIsNotFoundException
      */
@@ -48,6 +50,10 @@ public class FilesListManager {
         this.filesList.add(file);
     }
 
+    /**
+     * Delete file from list
+     * @param sourcePath
+     */
     public void removeFile(Path sourcePath){
         for (int i = 0; i < filesList.size(); i++) {
             if (filesList.get(i).getAbsolutePath().equals(sourcePath)){
@@ -59,11 +65,14 @@ public class FilesListManager {
         ConsoleHelper.writeMessage(String.format("Файл %s не найден.", sourcePath));
     }
 
-    public void refreshFilesList(){
+    /**
+     * Refresh size and status isExist
+     * @throws IOException
+     */
+    public void refreshFilesList() throws IOException {
         for (FileProperties file : filesList) {
-//            setFileExistMethod(file);
+            file.refresh();
         }
-
     }
 
     public int size(){

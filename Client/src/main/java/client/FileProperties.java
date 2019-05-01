@@ -49,6 +49,19 @@ public class FileProperties {
         this.fileExist = true;
     }
 
+    /**
+     * Refresh information about file
+     * @throws IOException
+     */
+    public void refresh() throws IOException {
+        if(Files.notExists(absolutePath)){
+            fileExist = false;
+        } else {
+            fileExist = true;
+            this.size = Files.size(absolutePath);
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -71,21 +84,27 @@ public class FileProperties {
 
     @Override
     public String toString() {
-        // Строим красивую строку из свойств
         StringBuilder builder = new StringBuilder();
-        builder.append(name);
-        builder.append("\t");
-        builder.append(size / 1024);
+        builder.append(changeStringLength(name, 16));
+        builder.append(changeStringLength(((size / 1024) + " "), 8));
         builder.append(" Kb, ");
         builder.append("absolute path: ");
-        builder.append(absolutePath);
+        builder.append(changeStringLength(absolutePath.toString(), 32));
         builder.append(", when added: ");
         String pattern = "yyyy.MM.dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(timeWhenAdd);
-        builder.append(date);
+        builder.append(changeStringLength(date, 20));
         builder.append(" file exist: ");
         builder.append(isFileExist());
         return builder.toString();
+    }
+
+    private String changeStringLength(String text, int lengthToChange){
+        StringBuilder stringBuilder = new StringBuilder(text);
+        for (int i = text.length(); i < lengthToChange; i++) {
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
     }
 }
