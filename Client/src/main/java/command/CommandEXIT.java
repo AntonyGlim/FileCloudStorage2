@@ -6,8 +6,6 @@ import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
-import java.sql.SQLException;
-
 import static client.DBManager.deleteAllFromTable;
 import static client.DBManager.insertIntoTable;
 

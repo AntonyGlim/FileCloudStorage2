@@ -5,9 +5,6 @@ import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class CommandCONTENT extends CommandClientOnly {
     public void execute() throws Exception {
         try {

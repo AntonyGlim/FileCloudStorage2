@@ -1,6 +1,5 @@
 package command;
 
-import client.FileManager;
 import client.FileProperties;
 import client.FilesList;
 import common.ConsoleHelper;

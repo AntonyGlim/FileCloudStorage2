@@ -1,11 +1,9 @@
 package command;
 
-import client.FileProperties;
 import client.FilesList;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
