@@ -1,6 +1,7 @@
 package client;
 
 import common.ConsoleHelper;
+import exception.FileAlreadyExistException;
 import exception.PathIsNotFoundException;
 
 import java.io.IOException;
@@ -27,14 +28,17 @@ public class FilesListManager {
     }
 
     /**
-     * Add only if file exist
+     * Add only if file exist and list does not contain such file
      * Method for adding data with console
      * @param file
      * @throws PathIsNotFoundException
      */
-    public void addFile(FileProperties file) throws PathIsNotFoundException {
+    public void addFile(FileProperties file) throws PathIsNotFoundException, FileAlreadyExistException {
         if(!file.isFileExist()){
             throw new PathIsNotFoundException();
+        }
+        if (filesListContainsPath(file.getAbsolutePath())){
+            throw new FileAlreadyExistException();
         } else {
             this.filesList.add(file);
         }
@@ -81,6 +85,15 @@ public class FilesListManager {
 
     public List<FileProperties> getFilesList() {
         return filesList;
+    }
+
+    public boolean filesListContainsPath(Path sourcePath){
+        for (FileProperties file : filesList) {
+            if (file.getAbsolutePath().equals(sourcePath)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
