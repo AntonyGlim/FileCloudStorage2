@@ -42,6 +42,7 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - удалить файл из списка файлов для отправки", ClientOperation.REMOVE.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - вполнить подключение к серверу", ClientOperation.CONNECTION.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
 
         return ClientOperation.values()[ConsoleHelper.readInt()];
