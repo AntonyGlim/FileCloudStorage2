@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -77,7 +78,10 @@ public class FileProperties {
         builder.append("absolute path: ");
         builder.append(absolutePath);
         builder.append(", when added: ");
-        builder.append(timeWhenAdd.getTime());
+        String pattern = "yyyy.MM.dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(timeWhenAdd);
+        builder.append(date);
         builder.append(" file exist: ");
         builder.append(isFileExist());
         return builder.toString();

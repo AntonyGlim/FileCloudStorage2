@@ -12,6 +12,7 @@ public class CommandExecutor {
         allKnownCommandsMap.put(ClientOperation.ADD, new CommandADD());
         allKnownCommandsMap.put(ClientOperation.REMOVE, new CommandREMOVE());
         allKnownCommandsMap.put(ClientOperation.CONTENT, new CommandCONTENT());
+        allKnownCommandsMap.put(ClientOperation.REFRESH, new CommandREFRESH());
         allKnownCommandsMap.put(ClientOperation.EXIT, new CommandEXIT());
     }
 
