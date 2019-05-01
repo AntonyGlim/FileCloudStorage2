@@ -12,6 +12,7 @@ import java.util.Date;
  * размер файла
  * абсолютный путь
  * время добавления
+ * существует-ли файл на диске в данный момент
  */
 public class FileProperties {
     private String name;
@@ -21,20 +22,25 @@ public class FileProperties {
     private boolean fileExist;
 
     /**
-     * Конструктор для извлечения файлов из БД
-     * @param name
-     * @param size
-     * @param absolutePath
-     * @param timeWhenAdd
+     * With the help of The constructor adds a file,
+     * the properties of that are stored in the database
      */
     public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
-        this.fileExist = true;
+        if(Files.notExists(absolutePath)){
+            fileExist = false;
+        } else {
+            fileExist = true;
+        }
     }
 
+    /**
+     * With the help of The constructor adds a file,
+     * which user write on console
+     */
     public FileProperties(Path sourcePath) throws IOException {
         this.name = sourcePath.getFileName().toString();
         this.size = Files.size(sourcePath);
@@ -63,10 +69,6 @@ public class FileProperties {
         return fileExist;
     }
 
-    public void setFileExist(boolean fileExist) {
-        this.fileExist = fileExist;
-    }
-
     @Override
     public String toString() {
         // Строим красивую строку из свойств
@@ -85,36 +87,5 @@ public class FileProperties {
         builder.append(" file exist: ");
         builder.append(isFileExist());
         return builder.toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-/*
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if ((o == null) || o.getClass() != this.getClass()) return false;
-        FileProperties fileProperties = (FileProperties) o;
-        if (!(o instanceof FileProperties)) return false;
-        return (name == fileProperties.name || (name != null && name.equals(fileProperties.name)))
-                && size == fileProperties.size
-                && (absolutePath == fileProperties.absolutePath || (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
-    }
-*/
-
-    /**
-     * Метод сравнивает только абсолютные пути к файлам
-     * @param o
-     * @return
-     */
-    public boolean equalsByAbsolutePath(Object o) {
-        if (o == this) return true;
-        if ((o == null) || o.getClass() != this.getClass()) return false;
-        FileProperties fileProperties = (FileProperties) o;
-        if (!(o instanceof FileProperties)) return false;
-        return (absolutePath == fileProperties.absolutePath ||
-                (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
     }
 }

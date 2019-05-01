@@ -11,6 +11,6 @@
         <TextField fx:id="tfFileName" focusTraversable="false" promptText="Укажите имя файла на сервере, который хотите скачать" HBox.hgrow="ALWAYS" />
 <!--        <Button onAction="#pressOnDownloadBtn" text="Скачать" />-->
     </HBox>
-    <ListView fx:id="filesList" VBox.vgrow="ALWAYS" />
+    <ListView fx:id="filesListManager" VBox.vgrow="ALWAYS" />
     <!--<Button onAction="#pressOnSendData" text="Test Netty Send" />-->
 </VBox>

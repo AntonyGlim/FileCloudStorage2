@@ -1,6 +1,6 @@
 package command;
 
-import client.FilesList;
+import client.FilesListManager;
 import common.ConsoleHelper;
 
 public class CommandREFRESH extends CommandClientOnly  {
@@ -8,9 +8,9 @@ public class CommandREFRESH extends CommandClientOnly  {
     public void execute() throws Exception {
         ConsoleHelper.writeMessage("Обновление списока файлов, для отправки на сервер.");
 
-        FilesList filesList = getFilesList();
+        FilesListManager filesListManager = getFilesList();
 
-        filesList.refreshList();
+//        filesListManager.refreshList();
 
         ConsoleHelper.writeMessage("Список файлов, для отправки на сервер обновлен.");
 

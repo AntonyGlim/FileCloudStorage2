@@ -1,10 +1,9 @@
 package command;
 
-import client.FilesList;
-import common.ConsoleHelper;
+import client.FilesListManager;
 
 public abstract class CommandClientOnly implements Command {
-    public FilesList getFilesList() throws Exception{
-        return FilesList.getFilesList();
+    public FilesListManager getFilesList() throws Exception{
+        return FilesListManager.getFilesListManager();
     }
 }

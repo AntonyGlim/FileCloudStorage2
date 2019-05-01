@@ -19,7 +19,7 @@ public class Client {
     public static void main(String[] args) throws Exception {
 
         ClientOperation operation = null;
-        FilesList filesList = returnFilesListFromDB();
+        FilesListManager filesListManager = returnFilesListFromDB();
 
         do {
             operation = askOperation();

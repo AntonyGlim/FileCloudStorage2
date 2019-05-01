@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Date;
 
-import static client.FilesList.getFilesList;
+import static client.FilesListManager.getFilesListManager;
 
 /**
  * Класс будет отвечать за работу с базой данных
@@ -61,17 +61,17 @@ public class DBManager {
     }
 
     /**
-     * Метод вернет FilesList, который сформирует из БД.
+     * Метод вернет FilesListManager, который сформирует из БД.
      * @throws SQLException
      */
-    public static FilesList returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
-        FilesList filesList = getFilesList();;
+    public static FilesListManager returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
+        FilesListManager filesListManager = getFilesListManager();;
         try {
             connect();
             String sql = String.format("SELECT * FROM %s;", tableName);
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()){
-                filesList.addFileFromDB(new FileProperties(
+                filesListManager.addFileFromDB(new FileProperties(
                         rs.getString(2),
                         rs.getLong(3),
                         Paths.get(rs.getString(4)),
@@ -83,7 +83,7 @@ public class DBManager {
         } finally {
             disconnect();
         }
-        return filesList;
+        return filesListManager;
     }
 
     /**

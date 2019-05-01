@@ -2,7 +2,7 @@ package command;
 
 import client.DBManager;
 import client.FileProperties;
-import client.FilesList;
+import client.FilesListManager;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
 
@@ -17,11 +17,11 @@ public class CommandEXIT extends CommandClientOnly {
 
     public void execute() throws Exception {
         try {
-            FilesList filesList = getFilesList();
+            FilesListManager filesListManager = getFilesList();
             DBManager dbManager = new DBManager();
             deleteAllFromTable(); //перед каждым сохранением удаляем все из БД
-            if (filesList.size() > 0){
-                for (FileProperties file : filesList.getFileList()) {
+            if (filesListManager.size() > 0){
+                for (FileProperties file : filesListManager.getFilesList()) {
                     insertIntoTable(
                             file.getName(),
                             file.getSize(),
