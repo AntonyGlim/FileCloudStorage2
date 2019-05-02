@@ -17,6 +17,7 @@ TODO добавить список команд по работе с серве�
 public class Client {
 
     private String clientName;
+    private volatile boolean clientConnected = false; //оно будет устанавливаться в true, если клиент подсоединен к серверу или в false в противном случае
     public ConnectionManager connectionManager;
 
     public String getClientName() {

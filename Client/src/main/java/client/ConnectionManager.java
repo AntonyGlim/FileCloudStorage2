@@ -19,8 +19,8 @@ import java.net.SocketAddress;
 public class ConnectionManager implements Closeable {
 
     private final Socket socket;
-    private ObjectEncoderOutputStream outOES;
-    private ObjectDecoderInputStream inODS;
+    private final ObjectEncoderOutputStream outOES;
+    private final ObjectDecoderInputStream inODS;
 
     public ConnectionManager(Socket socket) throws IOException {
         this.socket = socket;
@@ -74,30 +74,4 @@ public class ConnectionManager implements Closeable {
         outOES.close();
         socket.close();
     }
-
-
-//    public boolean sendMessage() {
-//        try (Socket socket = new Socket("localhost", 7777)) {
-//            Message fileMessage = new Message(MessageType.FILE, new File("Client/1.jpg"));
-//            System.out.println(fileMessage.getBytes().length);
-//            oeos.writeObject(fileMessage);
-//            oeos.flush();
-//            odis = new ObjectDecoderInputStream(socket.getInputStream(), 100 * 1024 * 1024);
-////            Message msgFromServer = (Message)odis.readObject();
-////            System.out.println("Answer from server: " + msgFromServer.getText());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                oeos.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                odis.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
