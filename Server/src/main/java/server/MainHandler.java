@@ -2,6 +2,7 @@ package server;
 
 import common.ConsoleHelper;
 import common.Message;
+import common.MessageType;
 import common.common.FileMessage;
 import common.common.FileRequest;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,8 +35,13 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
-                fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
-                fileOutputStream.write(messageFromClient.getBytes());
+                if (messageFromClient.getType().equals(MessageType.TEST)){
+                    ctx.writeAndFlush(new Message(MessageType.TEST, "Done!"));
+                }
+                if (messageFromClient.getType().equals(MessageType.TEST)){
+                    fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
+                    fileOutputStream.write(messageFromClient.getBytes());
+                }
             }
         } finally {
             ReferenceCountUtil.release(msg);

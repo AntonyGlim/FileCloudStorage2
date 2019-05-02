@@ -11,5 +11,6 @@ public enum MessageType {
     USER_ADDED,         //пользователь добавлен.
     USER_REMOVED,       //пользователь удален.
     TEXT,               //текстовое сообщение.
-    FILE                //передача файла
+    FILE,                //передача файла
+    TEST
 }

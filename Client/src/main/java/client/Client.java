@@ -16,6 +16,16 @@ TODO добавить список команд по работе с серве�
  */
 public class Client {
 
+    private String clientName;
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
     public static void main(String[] args) throws Exception {
 
         ClientOperation operation = null;

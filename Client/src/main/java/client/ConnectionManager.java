@@ -19,63 +19,13 @@ import java.net.SocketAddress;
 public class ConnectionManager implements Closeable {
 
     private final Socket socket;
-    private final ObjectEncoderOutputStream outOES;
-    private final ObjectDecoderInputStream inODS;
+    private ObjectEncoderOutputStream outOES = null;
+    private ObjectDecoderInputStream inODS = null;
 
     public ConnectionManager(Socket socket) throws IOException {
         this.socket = socket;
         this.outOES = new ObjectEncoderOutputStream(socket.getOutputStream());  //You need to create an ObjectOutputStream class object before creating an ObjectInputStream class object
         this.inODS = new ObjectDecoderInputStream(socket.getInputStream());     //otherwise, a mutual blocking of streams may occur.
-    }
-
-    public void connect() throws IOException {
-        String serverAddress = getServerAddress();
-        int serverPort = getServerPort();
-        try (Socket socket = new Socket(serverAddress, serverPort)) {
-            ConnectionManager connectionManager = new ConnectionManager(socket);
-        }
-    }
-
-    /**
-     * Должен запросить ввод адреса сервера у пользователя и вернуть введенное значение.
-     * Адрес может быть строкой, содержащей ip, если клиент и сервер запущен на разных машинах
-     * или 'localhost', если клиент и сервер работают на одной машине.
-     * @return
-     */
-    protected String getServerAddress() throws IOException {
-        ConsoleHelper.writeMessage("Введите адрес сервера");
-        String address = ConsoleHelper.readString();
-        return address;
-    }
-
-    /**
-     * Должен запрашивать ввод порта сервера и возвращать его
-     * @return
-     */
-    protected int getServerPort() throws IOException {
-        ConsoleHelper.writeMessage("Введите адрес порта");
-        int port = ConsoleHelper.readInt();
-        return port;
-    }
-
-    /**
-     * Должен запрашивать и возвращать имя пользователя
-     * @return
-     */
-    protected String getUserName() throws IOException {
-        ConsoleHelper.writeMessage("Введите имя пользователя");
-        String userName = ConsoleHelper.readString();
-        return userName;
-    }
-
-    /**
-     * Должен запрашивать и возвращать пароль пользователя
-     * @return
-     */
-    protected String getUserPassword() throws IOException {
-        ConsoleHelper.writeMessage("Введите пароль");
-        String userName = ConsoleHelper.readString();
-        return userName;
     }
 
     /**
@@ -87,6 +37,7 @@ public class ConnectionManager implements Closeable {
     public void send(Message message) throws IOException {
         synchronized (outOES){
             outOES.writeObject(message);
+            outOES.flush();
         }
     }
 
