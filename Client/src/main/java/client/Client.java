@@ -3,10 +3,7 @@ package client;
 import common.ConsoleHelper;
 
 import java.io.IOException;
-import java.nio.file.Files;
-
 import static client.DBManager.returnFilesListFromDB;
-import static client.FilesList.getFilesList;
 /*
 TODO list:24.04.2019
 TODO Разобраться с датой (она должна корректно выводиться)
@@ -19,10 +16,20 @@ TODO добавить список команд по работе с серве�
  */
 public class Client {
 
+    private String clientName;
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
     public static void main(String[] args) throws Exception {
 
         ClientOperation operation = null;
-        FilesList filesList = returnFilesListFromDB();
+        FilesListManager filesListManager = returnFilesListFromDB();
 
         do {
             operation = askOperation();
@@ -44,6 +51,8 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - добавить файл в список файлов для отправки", ClientOperation.ADD.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - удалить файл из списка файлов для отправки", ClientOperation.REMOVE.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - вполнить подключение к серверу", ClientOperation.CONNECTION.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
 
         return ClientOperation.values()[ConsoleHelper.readInt()];

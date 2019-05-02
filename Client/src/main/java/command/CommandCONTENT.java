@@ -1,21 +1,18 @@
 package command;
 
 import client.FileProperties;
-import client.FilesList;
+import client.FilesListManager;
 import common.ConsoleHelper;
 import exception.PathIsNotFoundException;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class CommandCONTENT extends CommandClientOnly {
     public void execute() throws Exception {
         try {
             ConsoleHelper.writeMessage("Просмотр списока файлов, для отправки на сервер.");
 
-            FilesList filesList = getFilesList();
+            FilesListManager filesListManager = getFilesList();
 
-            for (FileProperties file : filesList.getFileList()) {
+            for (FileProperties file : filesListManager.getFilesList()) {
                 ConsoleHelper.writeMessage(file.toString());
             }
 

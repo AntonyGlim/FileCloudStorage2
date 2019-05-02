@@ -3,14 +3,17 @@ package client;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * В классе будут храниться данные о объекте
- * имя файла
- * размер файла
- * абсолютный путь
- * время добавления
+ * The class will store data about the object.
+ * file name
+ * file size
+ * absolute path
+ * add time
+ * Is there a file on the disk at the moment?
+ * TODO Delete Path - Serialization
  */
 public class FileProperties {
     private String name;
@@ -20,26 +23,44 @@ public class FileProperties {
     private boolean fileExist;
 
     /**
-     * Конструктор для извлечения файлов из БД
-     * @param name
-     * @param size
-     * @param absolutePath
-     * @param timeWhenAdd
+     * With the help of The constructor adds a file,
+     * the properties of that are stored in the database
      */
     public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
-        this.fileExist = true;
+        if(Files.notExists(absolutePath)){
+            fileExist = false;
+        } else {
+            fileExist = true;
+        }
     }
 
+    /**
+     * With the help of The constructor adds a file,
+     * which user write on console
+     */
     public FileProperties(Path sourcePath) throws IOException {
         this.name = sourcePath.getFileName().toString();
         this.size = Files.size(sourcePath);
         this.absolutePath = sourcePath;
         this.timeWhenAdd = new Date();
         this.fileExist = true;
+    }
+
+    /**
+     * Refresh information about file
+     * @throws IOException
+     */
+    public void refresh() throws IOException {
+        if(Files.notExists(absolutePath)){
+            fileExist = false;
+        } else {
+            fileExist = true;
+            this.size = Files.size(absolutePath);
+        }
     }
 
     public String getName() {
@@ -62,55 +83,36 @@ public class FileProperties {
         return fileExist;
     }
 
-    public void setFileExist(boolean fileExist) {
-        this.fileExist = fileExist;
-    }
-
     @Override
     public String toString() {
-        // Строим красивую строку из свойств
         StringBuilder builder = new StringBuilder();
-        builder.append(name);
-        builder.append("\t");
-        builder.append(size / 1024);
+        builder.append(changeStringLength(name, 16));
+        builder.append(changeStringLength(((size / 1024) + " "), 8));
         builder.append(" Kb, ");
         builder.append("absolute path: ");
-        builder.append(absolutePath);
+        builder.append(changeStringLength(absolutePath.toString(), 32));
         builder.append(", when added: ");
-        builder.append(timeWhenAdd.getTime());
+        String pattern = "yyyy.MM.dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(timeWhenAdd);
+        builder.append(changeStringLength(date, 20));
         builder.append(" file exist: ");
         builder.append(isFileExist());
         return builder.toString();
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-/*
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if ((o == null) || o.getClass() != this.getClass()) return false;
-        FileProperties fileProperties = (FileProperties) o;
-        if (!(o instanceof FileProperties)) return false;
-        return (name == fileProperties.name || (name != null && name.equals(fileProperties.name)))
-                && size == fileProperties.size
-                && (absolutePath == fileProperties.absolutePath || (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
-    }
-*/
-
     /**
-     * Метод сравнивает только абсолютные пути к файлам
-     * @param o
+     * Auxiliary method for more accurate output
+     * @param text
+     * @param lengthToChange
      * @return
      */
-    public boolean equalsByAbsolutePath(Object o) {
-        if (o == this) return true;
-        if ((o == null) || o.getClass() != this.getClass()) return false;
-        FileProperties fileProperties = (FileProperties) o;
-        if (!(o instanceof FileProperties)) return false;
-        return (absolutePath == fileProperties.absolutePath ||
-                (absolutePath != null && absolutePath.equals(fileProperties.absolutePath)));
+    private String changeStringLength(String text, int lengthToChange){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = text.length(); i < lengthToChange; i++) {
+            stringBuilder.append(" ");
+        }
+        stringBuilder.append(text);
+        return stringBuilder.toString();
     }
 }

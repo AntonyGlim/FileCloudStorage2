@@ -1,9 +1,9 @@
 package command;
 
-import client.FileManager;
 import client.FileProperties;
-import client.FilesList;
+import client.FilesListManager;
 import common.ConsoleHelper;
+import exception.FileAlreadyExistException;
 import exception.PathIsNotFoundException;
 
 import java.nio.file.Files;
@@ -15,18 +15,20 @@ public class CommandADD extends CommandClientOnly {
         try {
             ConsoleHelper.writeMessage("Добавление нового файла в список файлов, для отправки на сервер.");
 
-            FilesList filesList = getFilesList();
+            FilesListManager filesListManager = getFilesList();
 
             ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
 
             Path sourcePath = Paths.get(ConsoleHelper.readString());
             if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
-            filesList.addFile(new FileProperties(sourcePath));
+            filesListManager.addFile(new FileProperties(sourcePath));
 
             ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 
         } catch (PathIsNotFoundException e) {
             ConsoleHelper.writeMessage("Файл не был найден.");
+        } catch (FileAlreadyExistException e){
+            ConsoleHelper.writeMessage("Файл с таким именем уже добавлен в список");
         }
     }
 }
