@@ -39,7 +39,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(new Message(MessageType.TEST, String.format("Соединение установлено.", messageFromClient.getText())));
                 }
                 if (messageFromClient.getType().equals(MessageType.FILE)){
-                    fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
+                    fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
                 }
             }

@@ -10,7 +10,11 @@ import java.net.Socket;
 
 public class CommandCONNECTION extends CommandClientOnly {
 
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
+
+    public ConnectionManager getConnectionManager() {
+        return connectionManager;
+    }
 
     @Override
     public void execute() throws Exception {

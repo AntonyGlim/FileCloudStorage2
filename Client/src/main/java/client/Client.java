@@ -17,6 +17,7 @@ TODO добавить список команд по работе с серве�
 public class Client {
 
     private String clientName;
+    public ConnectionManager connectionManager;
 
     public String getClientName() {
         return clientName;
@@ -53,6 +54,7 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - вполнить подключение к серверу", ClientOperation.CONNECTION.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
 
         return ClientOperation.values()[ConsoleHelper.readInt()];
