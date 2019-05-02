@@ -1,7 +1,6 @@
 package common;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Класс, отвечающий за пересылаемые сообщения
@@ -16,6 +15,7 @@ public class Message implements Serializable {
     private final MessageType type; //будет содержать тип сообщения
     private final String text; //будет содержать текст сообщения
     private final File file; //будет содержать файл для пересылки
+    private byte[] bytes; //собственно в массиве будет храниться тело файла
 
     public Message(MessageType type) {
         this.type = type;
@@ -29,16 +29,13 @@ public class Message implements Serializable {
         file = null;
     }
 
-    public Message(MessageType type, File file) {
+    public Message(MessageType type, File file) throws IOException {
         this.type = type;
         this.text = null;
         this.file = file;
-    }
-
-    public Message(MessageType type, String text, File file) {
-        this.type = type;
-        this.text = text;
-        this.file = file;
+        FileInputStream fileInputStream = new FileInputStream(file);
+        bytes = new byte[(int)file.length()];
+        fileInputStream.read(bytes);
     }
 
     public MessageType getType() {
@@ -51,5 +48,9 @@ public class Message implements Serializable {
 
     public File getFile() {
         return file;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
     }
 }

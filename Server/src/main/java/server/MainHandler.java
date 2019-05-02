@@ -1,12 +1,15 @@
 package server;
 
 import common.ConsoleHelper;
+import common.Message;
 import common.common.FileMessage;
 import common.common.FileRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -27,12 +30,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg == null) {
                 return;
             }
-            if (msg instanceof FileRequest) {
-                FileRequest fr = (FileRequest) msg;
-                if (Files.exists(Paths.get("server_storage/" + fr.getFilename()))) {
-                    FileMessage fm = new FileMessage(Paths.get("server_storage/" + fr.getFilename()));
-                    ctx.writeAndFlush(fm);
-                }
+            if (msg instanceof Message) {
+                Message messageFromClient = (Message) msg;
+                FileOutputStream fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
+                fileOutputStream.write(messageFromClient.getBytes());
             }
         } finally {
             ReferenceCountUtil.release(msg);
