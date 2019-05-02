@@ -1,5 +1,6 @@
-package server.server;
+package server;
 
+import common.ConsoleHelper;
 import common.common.FileMessage;
 import common.common.FileRequest;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,6 +11,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MainHandler extends ChannelInboundHandlerAdapter {
+
+    /**
+     * The method is executed once,
+     * when the client is connected.
+     */
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ConsoleHelper.writeMessage("Client connected... ");
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
