@@ -26,17 +26,20 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        FileOutputStream fileOutputStream = null;
         try {
             if (msg == null) {
                 return;
             }
+
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
-                FileOutputStream fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
+                fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
                 fileOutputStream.write(messageFromClient.getBytes());
             }
         } finally {
             ReferenceCountUtil.release(msg);
+            fileOutputStream.close();
         }
     }
 
