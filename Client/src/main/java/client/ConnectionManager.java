@@ -19,8 +19,8 @@ import java.net.SocketAddress;
 public class ConnectionManager implements Closeable {
 
     private final Socket socket;
-    private ObjectEncoderOutputStream outOES = null;
-    private ObjectDecoderInputStream inODS = null;
+    private ObjectEncoderOutputStream outOES;
+    private ObjectDecoderInputStream inODS;
 
     public ConnectionManager(Socket socket) throws IOException {
         this.socket = socket;

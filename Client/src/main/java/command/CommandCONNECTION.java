@@ -25,8 +25,11 @@ public class CommandCONNECTION extends CommandClientOnly {
     public void connect() throws IOException, ClassNotFoundException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
-        try (Socket socket = new Socket(serverAddress, serverPort)) {
-            connectionManager = new ConnectionManager(socket);
+            connectionManager = new ConnectionManager(new Socket(serverAddress, serverPort));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         connectionManager.send(new Message(MessageType.TEST));
         ConsoleHelper.writeMessage(connectionManager.receive().getText());

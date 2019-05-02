@@ -36,16 +36,15 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
                 if (messageFromClient.getType().equals(MessageType.TEST)){
-                    ctx.writeAndFlush(new Message(MessageType.TEST, "Done!"));
+                    ctx.writeAndFlush(new Message(MessageType.TEST, "Соединение установлено."));
                 }
-                if (messageFromClient.getType().equals(MessageType.TEST)){
+                if (messageFromClient.getType().equals(MessageType.FILE)){
                     fileOutputStream = new FileOutputStream("Server/" + messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
                 }
             }
         } finally {
             ReferenceCountUtil.release(msg);
-            fileOutputStream.close();
         }
     }
 
