@@ -1,5 +1,7 @@
 package command;
 
+import client.Client;
+import client.ConnectionManager;
 import client.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
@@ -23,9 +25,7 @@ public class CommandUPLOAD extends CommandClientOnly {
 //
 //            Path sourcePath = Paths.get(ConsoleHelper.readString());
 //            if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
-            CommandCONNECTION commandCONNECTION = new CommandCONNECTION();
-            commandCONNECTION.execute();
-            commandCONNECTION.getConnectionManager().send(new Message(MessageType.FILE, new File("Client/1.jpg")));
+            ConnectionManager.getConnectionManager(null).send(new Message(MessageType.FILE, new File("Client/1.jpg")));
             ConsoleHelper.writeMessage("Файла успешно отправлен.");
 
 //        } catch (PathIsNotFoundException e) {

@@ -5,7 +5,6 @@ public enum  ClientOperation {
     REMOVE,
     CONTENT,
     REFRESH,
-    CONNECTION,
     UPLOAD,
     EXIT
 }
