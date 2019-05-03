@@ -18,14 +18,20 @@ import java.net.SocketAddress;
  */
 public class ConnectionManager implements Closeable {
 
+    private static ConnectionManager connectionManager;
     private final Socket socket;
     private final ObjectEncoderOutputStream outOES;
     private final ObjectDecoderInputStream inODS;
 
-    public ConnectionManager(Socket socket) throws IOException {
+    private ConnectionManager(Socket socket) throws IOException {
         this.socket = socket;
         this.outOES = new ObjectEncoderOutputStream(socket.getOutputStream());  //You need to create an ObjectOutputStream class object before creating an ObjectInputStream class object
         this.inODS = new ObjectDecoderInputStream(socket.getInputStream());     //otherwise, a mutual blocking of streams may occur.
+    }
+
+    public static synchronized ConnectionManager getConnectionManager(Socket socket) throws IOException {
+        if (connectionManager == null) connectionManager = new ConnectionManager(socket);
+        return connectionManager;
     }
 
     /**
