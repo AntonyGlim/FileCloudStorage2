@@ -1,8 +1,12 @@
 package client;
 
 import common.ConsoleHelper;
+import common.Message;
+import common.MessageType;
 
 import java.io.IOException;
+import java.net.Socket;
+
 import static client.DBManager.returnFilesListFromDB;
 /*
 TODO list:24.04.2019
@@ -18,7 +22,7 @@ public class Client {
 
     private String clientName;
     private volatile boolean clientConnected = false; //оно будет устанавливаться в true, если клиент подсоединен к серверу или в false в противном случае
-    public ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
 
     public String getClientName() {
         return clientName;
@@ -29,6 +33,9 @@ public class Client {
     }
 
     public static void main(String[] args) throws Exception {
+
+        Client client = new Client();
+        client.authorization();
 
         ClientOperation operation = null;
         FilesListManager filesListManager = returnFilesListFromDB();
@@ -60,4 +67,65 @@ public class Client {
 
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
+
+    public void authorization() throws IOException, ClassNotFoundException {
+        String serverAddress = getServerAddress();
+        int serverPort = getServerPort();
+        String clientName = getUserName();
+        String clientPassword = getUserPassword();
+        connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
+        connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+        ConsoleHelper.writeMessage(connectionManager.receive().getText());
+    }
+
+    /**
+     * Должен запросить ввод адреса сервера у пользователя и вернуть введенное значение.
+     * Адрес может быть строкой, содержащей ip, если клиент и сервер запущен на разных машинах
+     * или 'localhost', если клиент и сервер работают на одной машине.
+     * @return
+     */
+    protected String getServerAddress() throws IOException {
+        ConsoleHelper.writeMessage("Введите адрес сервера");
+//        String address = ConsoleHelper.readString();
+        String address = "localhost";
+        ConsoleHelper.writeMessage(address);
+        return address;
+    }
+
+    /**
+     * Должен запрашивать ввод порта сервера и возвращать его
+     * @return
+     */
+    protected int getServerPort() throws IOException {
+        ConsoleHelper.writeMessage("Введите адрес порта");
+//        int port = ConsoleHelper.readInt();
+        int port = 7777;
+        ConsoleHelper.writeMessage(Integer.toString(port));
+        return port;
+    }
+
+    /**
+     * Должен запрашивать и возвращать имя пользователя
+     * @return
+     */
+    protected String getUserName() throws IOException {
+        ConsoleHelper.writeMessage("Введите имя пользователя");
+//        String userName = ConsoleHelper.readString();
+        String userName = "Sam";
+        ConsoleHelper.writeMessage(userName);
+        return userName;
+    }
+
+    /**
+     * Должен запрашивать и возвращать пароль пользователя
+     * @return
+     */
+    protected String getUserPassword() throws IOException {
+        ConsoleHelper.writeMessage("Введите пароль");
+//        String userPassword = ConsoleHelper.readString();
+        String userPassword = "Password";
+        ConsoleHelper.writeMessage(userPassword);
+        return userPassword;
+    }
+
 }
