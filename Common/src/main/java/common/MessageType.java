@@ -4,6 +4,7 @@ package common;
  * клиентом и сервером.
  */
 public enum MessageType {
+    AUTHORIZATION,
     NAME_REQUEST,       //запрос имени.
     USER_NAME,          //имя пользователя.
     USER_PASSWORD,       //пароль пользователя.

@@ -35,8 +35,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
-                if (messageFromClient.getType().equals(MessageType.TEST)){
-                    ctx.writeAndFlush(new Message(MessageType.TEST, String.format("Соединение установлено.", messageFromClient.getText())));
+                if (messageFromClient.getType().equals(MessageType.AUTHORIZATION)){
+                    ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, String.format("Соединение установлено.")));
+                    ConsoleHelper.writeMessage(messageFromClient.getText());
                 }
                 if (messageFromClient.getType().equals(MessageType.FILE)){
                     fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());
