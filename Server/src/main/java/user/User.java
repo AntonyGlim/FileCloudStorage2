@@ -44,4 +44,9 @@ public class User {
     public void setTime_last_visit(long time_last_visit) {
         this.time_last_visit = time_last_visit;
     }
+
+    @Override
+    public String toString() {
+        return name + " " + registration_date + " " + time_last_visit;
+    }
 }

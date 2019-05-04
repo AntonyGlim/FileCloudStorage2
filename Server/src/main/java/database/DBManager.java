@@ -2,6 +2,7 @@ package database;
 
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;
+import user.User;
 
 import java.nio.file.Paths;
 import java.sql.*;
@@ -58,26 +59,30 @@ public class DBManager {
      * Метод вернет FilesListManager, который сформирует из БД.
      * @throws SQLException
      */
-    public static FilesListManager returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
-        FilesListManager filesListManager = getFilesListManager();;
+    public static User returnUserFromDBbyNameAndPass(int name, int password) throws SQLException, PathIsNotFoundException {
+        User user = null;
         try {
             connect();
-            String sql = String.format("SELECT * FROM %s;", tableName);
+            String sql = String.format("SELECT * FROM %s WHERE name = %d AND password = %d", tableName, name, password);
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()){
-                filesListManager.addFileFromDB(new FileProperties(
-                        rs.getString(2),
-                        rs.getLong(3),
-                        Paths.get(rs.getString(4)),
-                        new Date(rs.getLong(5))
-                ));
+
+            if (rs.next()) {
+                user = new User(
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getLong(4),
+                        rs.getLong(5)
+                );
+            } else {
+                ConsoleHelper.writeMessage("Пользователь не найден");
             }
+
         } catch (ClassNotFoundException e) {
             ConsoleHelper.writeMessage("Ошибка при загрузке данных");
         } finally {
             disconnect();
         }
-        return filesListManager;
+        return user;
     }
 
     /**
