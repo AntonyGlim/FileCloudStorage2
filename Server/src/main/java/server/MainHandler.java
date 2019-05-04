@@ -48,6 +48,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 if (messageFromClient.getType().equals(MessageType.FILE)){
                     fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
+                    ctx.writeAndFlush(new Message(MessageType.FILE, "Файл передан успешно."));
                 }
             }
         } finally {
