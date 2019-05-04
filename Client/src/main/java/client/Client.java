@@ -9,10 +9,7 @@ import java.net.Socket;
 
 import static client.DBManager.returnFilesListFromDB;
 /*
-TODO list:24.04.2019
-TODO Разобраться с датой (она должна корректно выводиться)
-TODO Реализовать команду removed
-TODO добавить список команд по работе с сервером
+TODO
 1.
  */
 /**
@@ -67,13 +64,25 @@ public class Client {
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
 
-    public void authorization() throws IOException, ClassNotFoundException {
-        String serverAddress = getServerAddress();
-        int serverPort = getServerPort();
+    private void registration() throws IOException, ClassNotFoundException {
+        connect();
         String clientName = getUserName();
         String clientPassword = getUserPassword();
-        connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
+        connectionManager.send(new Message(MessageType.REGISTRATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+    }
+
+    private void authorization() throws IOException, ClassNotFoundException {
+        connect();
+        String clientName = getUserName();
+        String clientPassword = getUserPassword();
         connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+    }
+
+    private void connect() throws IOException, ClassNotFoundException {
+        String serverAddress = getServerAddress();
+        int serverPort = getServerPort();
+        connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
+        connectionManager.send(new Message(MessageType.TEST_CONNECTION));
         ConsoleHelper.writeMessage(connectionManager.receive().getText());
     }
 

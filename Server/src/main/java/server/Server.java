@@ -31,7 +31,7 @@ public class Server {
                         @Override
                         public void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(
-                                    new ObjectDecoder(1024 * 1024 * 100, ClassResolvers.cacheDisabled(null)),
+                                    new ObjectDecoder(1024 * 1024 * 1023 * 2, ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
                                     new MainHandler()
                                     );
