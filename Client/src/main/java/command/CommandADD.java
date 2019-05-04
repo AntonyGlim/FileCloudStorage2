@@ -3,8 +3,8 @@ package command;
 import client.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
-import exception.FileAlreadyExistException;
-import exception.PathIsNotFoundException;
+import common.exception.FileAlreadyExistException;
+import common.exception.PathIsNotFoundException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

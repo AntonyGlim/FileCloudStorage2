@@ -1,16 +1,11 @@
 package command;
 
-import client.Client;
 import client.ConnectionManager;
-import client.FileProperties;
-import client.FilesListManager;
 import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
-import exception.FileAlreadyExistException;
-import exception.PathIsNotFoundException;
+import common.exception.PathIsNotFoundException;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

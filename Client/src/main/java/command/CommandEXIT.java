@@ -4,7 +4,7 @@ import client.DBManager;
 import client.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
-import exception.PathIsNotFoundException;
+import common.exception.PathIsNotFoundException;
 
 import static client.DBManager.deleteAllFromTable;
 import static client.DBManager.insertIntoTable;

@@ -3,7 +3,7 @@ package command;
 import client.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
-import exception.PathIsNotFoundException;
+import common.exception.PathIsNotFoundException;
 
 public class CommandCONTENT extends CommandClientOnly {
     public void execute() throws Exception {

@@ -1,8 +1,8 @@
 package client;
 
 import common.ConsoleHelper;
-import exception.FileAlreadyExistException;
-import exception.PathIsNotFoundException;
+import common.exception.FileAlreadyExistException;
+import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Path;

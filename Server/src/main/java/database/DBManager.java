@@ -1,4 +1,4 @@
-package client;
+package database;
 
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;
@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Date;
 
-import static client.FilesListManager.getFilesListManager;
 
 /**
  * Класс будет отвечать за работу с базой данных
@@ -15,7 +14,7 @@ import static client.FilesListManager.getFilesListManager;
 public class DBManager {
     private static Connection connection;
     private static Statement statement;
-    private static String tableName = "fileslist";
+    private static String tableName = "users";
 
     /**
      * Устанавливаем соединение с БД
@@ -24,7 +23,7 @@ public class DBManager {
      */
     public static void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:Client/src/main/java/database/files.db");
+        connection = DriverManager.getConnection("jdbc:sqlite:Server/src/main/java/database/users.db");
         statement = connection.createStatement();
     }
 
@@ -41,20 +40,15 @@ public class DBManager {
 
     /**
      * Метод добавляет запись в таблицу
-     * @param name
-     * @param size
-     * @param absolutePath
-     * @param timeWhenAdd
-     * @throws SQLException
      */
-    public static void insertIntoTable(String name, long size, String absolutePath, long timeWhenAdd) throws SQLException {
+    public static void insertIntoTable(int name, int password, long timeWhenAdd, long timeLastVisit) throws SQLException {
         try {
             connect();
-            String sql = String.format("INSERT INTO %s (name, size, absolutePath, timeWhenAdd) " +
-                    "VALUES ('%s', '%d', '%s', '%d');", tableName, name, size, absolutePath, timeWhenAdd);
+            String sql = String.format("INSERT INTO %s (name, password, registration_date, time_last_visit) " +
+                    "VALUES ('%d', '%d', '%d', '%d');", tableName, name, password, timeWhenAdd, timeLastVisit);
             statement.execute(sql);
         } catch (ClassNotFoundException e) {
-            ConsoleHelper.writeMessage("Ошибка при сохранении данных");
+            ConsoleHelper.writeMessage("Ошибка при добавлении данных");
         } finally {
             disconnect();
         }
