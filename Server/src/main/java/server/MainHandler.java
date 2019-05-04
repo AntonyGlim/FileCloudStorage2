@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 
 public class MainHandler extends ChannelInboundHandlerAdapter {
 
+    private volatile boolean clientConnected = false;
+
     /**
      * The method is executed once,
      * when the client is connected.
@@ -35,8 +37,13 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
-                if (messageFromClient.getType().equals(MessageType.TEST_CONNECTION)){
-                    ctx.writeAndFlush(new Message(MessageType.TEST_CONNECTION, "Соединение установлено."));
+                if (messageFromClient.getType().equals(MessageType.REGISTRATION) && !clientConnected){
+                    clientConnected = true;
+                    ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
+                }
+                if (messageFromClient.getType().equals(MessageType.AUTHORIZATION) && !clientConnected){
+                    clientConnected = true;
+                    ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен."));
                 }
                 if (messageFromClient.getType().equals(MessageType.FILE)){
                     fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());

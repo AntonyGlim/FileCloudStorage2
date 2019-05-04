@@ -32,7 +32,17 @@ public class Client {
     public static void main(String[] args) throws Exception {
 
         Client client = new Client();
-        client.authorization();
+        client.connect();
+        while (!client.clientConnected){
+            ConsoleHelper.writeMessage("Зарегистрируйтесь(1) или выполните вход(2)");
+            int i = ConsoleHelper.readInt();
+            if (i == 1){
+                client.registration();
+            }
+            if (i == 2){
+                client.authorization();
+            }
+        }
 
         ClientOperation operation = null;
         FilesListManager filesListManager = returnFilesListFromDB();
@@ -65,25 +75,31 @@ public class Client {
     }
 
     private void registration() throws IOException, ClassNotFoundException {
-        connect();
         String clientName = getUserName();
         String clientPassword = getUserPassword();
         connectionManager.send(new Message(MessageType.REGISTRATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+        Message message = connectionManager.receive();
+        if (message.getType() == MessageType.REGISTRATION_OK) {
+            clientConnected = true;
+            ConsoleHelper.writeMessage(message.getText());
+        }
     }
 
     private void authorization() throws IOException, ClassNotFoundException {
-        connect();
         String clientName = getUserName();
         String clientPassword = getUserPassword();
         connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+        Message message = connectionManager.receive();
+        if (message.getType() == MessageType.AUTHORIZATION_OK) {
+            clientConnected = true;
+            ConsoleHelper.writeMessage(message.getText());
+        }
     }
 
     private void connect() throws IOException, ClassNotFoundException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
         connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
-        connectionManager.send(new Message(MessageType.TEST_CONNECTION));
-        ConsoleHelper.writeMessage(connectionManager.receive().getText());
     }
 
     /**
