@@ -33,7 +33,7 @@ public class CommandEXIT extends CommandClientOnly {
         } catch (PathIsNotFoundException e) {
             ConsoleHelper.writeMessage("Файл не был найден.");
         }
-        ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DISCONNECTION, Client.getClientName()));
+        ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DISCONNECTION, Client.getClientName() + ""));
         ConsoleHelper.writeMessage("До встречи!");
     }
 }

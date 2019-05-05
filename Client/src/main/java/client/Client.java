@@ -10,29 +10,51 @@ import java.net.Socket;
 
 public class Client {
 
-    private int clientName;
-    private volatile boolean clientConnected = false;
-    private ConnectionManager connectionManager;
+    private static int clientName;
+    private static volatile boolean clientConnected = false;
+    private static ConnectionManager connectionManager;
 
-    public int getClientName() {
+    public static int getClientName() {
         return clientName;
+    }
+
+    static {
+        try {
+            connect();
+            while (!clientConnected){
+                ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
+                try {
+                    int i = ConsoleHelper.readInt();
+                    if (i == 1) registration();
+                    else if (i == 2) authorization();
+                    else throw new InvalidInputFormatException();
+                } catch (InvalidInputFormatException e){
+                    ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
         //authorization block
-        Client client = new Client();
-        client.connect();
-        while (!client.clientConnected){
-            ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
-            try {
-                int i = ConsoleHelper.readInt();
-                if (i == 1) client.registration();
-                else if (i == 2) client.authorization();
-                else throw new InvalidInputFormatException();
-            } catch (InvalidInputFormatException e){
-                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
-            }
-        }
+//        Client client = new Client();
+//        client.connect();
+//        while (!client.clientConnected){
+//            ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
+//            try {
+//                int i = ConsoleHelper.readInt();
+//                if (i == 1) client.registration();
+//                else if (i == 2) client.authorization();
+//                else throw new InvalidInputFormatException();
+//            } catch (InvalidInputFormatException e){
+//                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+//            }
+//        }
 
         //main loop block
         ClientOperation operation = null;
@@ -72,14 +94,14 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void registration() throws IOException, ClassNotFoundException {
+    private static void registration() throws IOException, ClassNotFoundException {
         int clientName = getUserName().hashCode();
         int clientPassword = getUserPassword().hashCode();
         connectionManager.send(new Message(MessageType.REGISTRATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.REGISTRATION_OK) {
             clientConnected = true;
-            this.clientName = clientName;
+            Client.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
         if (message.getType() == MessageType.REGISTRATION) {
@@ -93,14 +115,14 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void authorization() throws IOException, ClassNotFoundException {
+    private static void authorization() throws IOException, ClassNotFoundException {
         int clientName = getUserName().hashCode();
         int clientPassword = getUserPassword().hashCode();
         connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.AUTHORIZATION_OK) {
             clientConnected = true;
-            this.clientName = clientName;
+            Client.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
         if (message.getType() == MessageType.AUTHORIZATION) {
@@ -114,14 +136,14 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void connect() throws IOException, ClassNotFoundException {
+    private static void connect() throws IOException, ClassNotFoundException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
         connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
     }
 
 
-    protected String getServerAddress() throws IOException {
+    protected static String getServerAddress() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес сервера");
 //        String address = ConsoleHelper.readString();
         String address = "localhost";                               //TODO delete this
@@ -130,7 +152,7 @@ public class Client {
     }
 
 
-    protected int getServerPort() throws IOException {
+    protected static int getServerPort() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес порта");
 //        int port = ConsoleHelper.readInt();
         int port = 7777;                                            //TODO delete this
@@ -139,7 +161,7 @@ public class Client {
     }
 
 
-    protected String getUserName() throws IOException {
+    protected static String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
         String userName = ConsoleHelper.readString();
 //        String userName = "Sam1";                                 //TODO delete this
@@ -148,7 +170,7 @@ public class Client {
     }
 
 
-    protected String getUserPassword() throws IOException {
+    protected static String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
         String userPassword = ConsoleHelper.readString();
 //        String userPassword = "Password1";                        //TODO delete this
