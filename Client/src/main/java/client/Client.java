@@ -8,29 +8,15 @@ import common.exception.InvalidInputFormatException;
 import java.io.IOException;
 import java.net.Socket;
 
-import static client.DBManager.returnFilesListFromDB;
-/*
-TODO
-1.
- */
-/**
- * Стартовый класс для клиента
- */
 public class Client {
 
-    private String clientName;
-    private volatile boolean clientConnected = false; //оно будет устанавливаться в true, если клиент подсоединен к серверу или в false в противном случае
+
+    private volatile boolean clientConnected = false;
     private ConnectionManager connectionManager;
 
-    public String getClientName() {
-        return clientName;
-    }
-
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
 
     public static void main(String[] args) throws Exception {
+        //authorization block
         Client client = new Client();
         client.connect();
         while (!client.clientConnected){
@@ -45,9 +31,8 @@ public class Client {
             }
         }
 
+        //main loop block
         ClientOperation operation = null;
-        FilesListManager filesListManager = returnFilesListFromDB();
-
         do {
             try {
                 operation = askOperation();
@@ -56,16 +41,15 @@ public class Client {
                 ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
             }
         } while (operation != ClientOperation.EXIT);
-
     }
 
 
     /**
-     * Метод выводит на экран варианты того, что может сделать пользователь,
-     * и считывает от него цифру соответствующую номеру операции,
-     * которую пользователь хочет выполнить.
-     * @return
+     * User dialog method
+     * @return - operation which user want to do
      * @throws IOException
+     * @throws InvalidInputFormatException
+     * @throws ArrayIndexOutOfBoundsException
      */
     public static ClientOperation askOperation() throws IOException, InvalidInputFormatException, ArrayIndexOutOfBoundsException {
         ConsoleHelper.writeMessage("");
@@ -80,6 +64,11 @@ public class Client {
     }
 
 
+    /**
+     * User registration method
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void registration() throws IOException, ClassNotFoundException {
         String clientName = getUserName();
         String clientPassword = getUserPassword();
@@ -94,6 +83,12 @@ public class Client {
         }
     }
 
+
+    /**
+     * User authorization method
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void authorization() throws IOException, ClassNotFoundException {
         String clientName = getUserName();
         String clientPassword = getUserPassword();
@@ -108,58 +103,50 @@ public class Client {
         }
     }
 
+
+    /**
+     * Connection method
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void connect() throws IOException, ClassNotFoundException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
         connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
     }
 
-    /**
-     * Должен запросить ввод адреса сервера у пользователя и вернуть введенное значение.
-     * Адрес может быть строкой, содержащей ip, если клиент и сервер запущен на разных машинах
-     * или 'localhost', если клиент и сервер работают на одной машине.
-     * @return
-     */
+
     protected String getServerAddress() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес сервера");
 //        String address = ConsoleHelper.readString();
-        String address = "localhost";
+        String address = "localhost";                               //TODO delete this
         ConsoleHelper.writeMessage(address);
         return address;
     }
 
-    /**
-     * Должен запрашивать ввод порта сервера и возвращать его
-     * @return
-     */
+
     protected int getServerPort() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес порта");
 //        int port = ConsoleHelper.readInt();
-        int port = 7777;
+        int port = 7777;                                            //TODO delete this
         ConsoleHelper.writeMessage(Integer.toString(port));
         return port;
     }
 
-    /**
-     * Должен запрашивать и возвращать имя пользователя
-     * @return
-     */
+
     protected String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
         String userName = ConsoleHelper.readString();
-//        String userName = "Sam1";
+//        String userName = "Sam1";                                 //TODO delete this
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
 
-    /**
-     * Должен запрашивать и возвращать пароль пользователя
-     * @return
-     */
+
     protected String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
         String userPassword = ConsoleHelper.readString();
-//        String userPassword = "Password1";
+//        String userPassword = "Password1";                        //TODO delete this
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }
