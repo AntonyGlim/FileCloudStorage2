@@ -88,7 +88,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(new Message(MessageType.FILE, "Файл передан успешно."));
                 }
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
-
+                    int name = Integer.parseInt(messageFromClient.getText());
+                    deleteUserFromMap(Server.connectionUsersMap, name);
+                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
                 }
             }
         } finally {
@@ -109,7 +111,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
         return false;
     }
 
-    private void deleteUserFromMap(){
-
+    private void deleteUserFromMap(Map<Integer, Long> map, Integer name){
+        for (Map.Entry pair : map.entrySet()) {
+            if (pair.getKey() == name) map.remove(name);
+        }
     }
 }
