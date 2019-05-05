@@ -3,6 +3,7 @@ package client;
 import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
+import common.exception.InvalidInputFormatException;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -30,17 +31,17 @@ public class Client {
     }
 
     public static void main(String[] args) throws Exception {
-
         Client client = new Client();
         client.connect();
         while (!client.clientConnected){
-            ConsoleHelper.writeMessage("Зарегистрируйтесь(1) или выполните вход(2)");
-            int i = ConsoleHelper.readInt();
-            if (i == 1){
-                client.registration();
-            }
-            if (i == 2){
-                client.authorization();
+            ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
+            try {
+                int i = ConsoleHelper.readInt();
+                if (i == 1) client.registration();
+                else if (i == 2) client.authorization();
+                else throw new InvalidInputFormatException();
+            } catch (InvalidInputFormatException e){
+                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
             }
         }
 
@@ -48,11 +49,16 @@ public class Client {
         FilesListManager filesListManager = returnFilesListFromDB();
 
         do {
-            operation = askOperation();
-            CommandExecutor.execute(operation);
+            try {
+                operation = askOperation();
+                CommandExecutor.execute(operation);
+            } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e){
+                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+            }
         } while (operation != ClientOperation.EXIT);
 
     }
+
 
     /**
      * Метод выводит на экран варианты того, что может сделать пользователь,
@@ -61,7 +67,7 @@ public class Client {
      * @return
      * @throws IOException
      */
-    public static ClientOperation askOperation() throws IOException {
+    public static ClientOperation askOperation() throws IOException, InvalidInputFormatException, ArrayIndexOutOfBoundsException {
         ConsoleHelper.writeMessage("");
         ConsoleHelper.writeMessage("Выберите операцию:");
         ConsoleHelper.writeMessage(String.format("\t %d - добавить файл в список файлов для отправки", ClientOperation.ADD.ordinal()));
@@ -70,9 +76,9 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
-
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
+
 
     private void registration() throws IOException, ClassNotFoundException {
         String clientName = getUserName();

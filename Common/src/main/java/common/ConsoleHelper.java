@@ -1,5 +1,7 @@
 package common;
 
+import common.exception.InvalidInputFormatException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,8 +18,13 @@ public class ConsoleHelper {
         return text;
     }
 
-    public static int readInt() throws IOException {
-        String text = readString();
-        return Integer.parseInt(text.trim());
+    public static int readInt() throws IOException, InvalidInputFormatException {
+        try {
+            String text = readString();
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException e){
+            writeMessage("Не корректный ввод");
+            throw new InvalidInputFormatException();
+        }
     }
 }
