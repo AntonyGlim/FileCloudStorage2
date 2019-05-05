@@ -12,9 +12,13 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class Server {
 
     private int port;
+    public static Map<Integer, Long> connectionUsersMap = new ConcurrentHashMap<>();
 
     public Server(int port) {
         this.port = port;
