@@ -4,6 +4,7 @@ import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
 import database.DBManager;
+import exeption.NoSuchUserException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 public class MainHandler extends ChannelInboundHandlerAdapter {
 
@@ -40,23 +42,32 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
                 if (messageFromClient.getType().equals(MessageType.REGISTRATION) && !clientConnected){
-                    clientConnected = true;
+
                     String[] tokens = messageFromClient.getText().split(" ");
                     String name = tokens[0];
                     String password = tokens[1];
-                    long timeWhenAdd = System.currentTimeMillis();
-                    long timeLastChange = timeWhenAdd;
-                    dbManager.insertIntoTable(Integer.parseInt(name), Integer.parseInt(password), timeWhenAdd, timeLastChange);
-                    ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
+                    try {
+                        long timeWhenAdd = System.currentTimeMillis();
+                        long timeLastChange = timeWhenAdd;
+                        dbManager.insertIntoTable(Integer.parseInt(name), Integer.parseInt(password), timeWhenAdd, timeLastChange);
+                        ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
+                        clientConnected = true;
+                    } catch (SQLException e){
+                        ctx.writeAndFlush(new Message(MessageType.REGISTRATION, "Пользователь с таким именем уже существует."));
+                    }
                 }
                 if (messageFromClient.getType().equals(MessageType.AUTHORIZATION) && !clientConnected){
                     String[] tokens = messageFromClient.getText().split(" ");
                     String name = tokens[0];
                     String password = tokens[1];
-                    user = dbManager.returnUserFromDBbyNameAndPass(Integer.parseInt(name), Integer.parseInt(password));
-                    ConsoleHelper.writeMessage(user.toString());
-                    clientConnected = true;
-                    ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен."));
+                    try{
+                        user = dbManager.returnUserFromDBbyNameAndPass(Integer.parseInt(name), Integer.parseInt(password));
+                        ConsoleHelper.writeMessage(user.toString());
+                        clientConnected = true;
+                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
+                    } catch (NoSuchUserException e){
+                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Не верное имя пользователя или пароль"));
+                    }
                 }
                 if (messageFromClient.getType().equals(MessageType.FILE)){
                     fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());

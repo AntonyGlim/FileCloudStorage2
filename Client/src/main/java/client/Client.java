@@ -83,6 +83,9 @@ public class Client {
             clientConnected = true;
             ConsoleHelper.writeMessage(message.getText());
         }
+        if (message.getType() == MessageType.REGISTRATION) {
+            ConsoleHelper.writeMessage(message.getText());
+        }
     }
 
     private void authorization() throws IOException, ClassNotFoundException {
@@ -92,6 +95,9 @@ public class Client {
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.AUTHORIZATION_OK) {
             clientConnected = true;
+            ConsoleHelper.writeMessage(message.getText());
+        }
+        if (message.getType() == MessageType.AUTHORIZATION) {
             ConsoleHelper.writeMessage(message.getText());
         }
     }
@@ -134,8 +140,8 @@ public class Client {
      */
     protected String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
-//        String userName = ConsoleHelper.readString();
-        String userName = "Sam";
+        String userName = ConsoleHelper.readString();
+//        String userName = "Sam1";
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
@@ -146,8 +152,8 @@ public class Client {
      */
     protected String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
-//        String userPassword = ConsoleHelper.readString();
-        String userPassword = "Password";
+        String userPassword = ConsoleHelper.readString();
+//        String userPassword = "Password1";
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }

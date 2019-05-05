@@ -2,6 +2,7 @@ package database;
 
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;
+import exeption.NoSuchUserException;
 import user.User;
 
 import java.nio.file.Paths;
@@ -59,7 +60,7 @@ public class DBManager {
      * Метод вернет FilesListManager, который сформирует из БД.
      * @throws SQLException
      */
-    public static User returnUserFromDBbyNameAndPass(int name, int password) throws SQLException, PathIsNotFoundException {
+    public static User returnUserFromDBbyNameAndPass(int name, int password) throws SQLException, NoSuchUserException {
         User user = null;
         try {
             connect();
@@ -74,7 +75,7 @@ public class DBManager {
                         rs.getLong(5)
                 );
             } else {
-                ConsoleHelper.writeMessage("Пользователь не найден");
+                throw new NoSuchUserException();
             }
 
         } catch (ClassNotFoundException e) {
