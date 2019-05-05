@@ -4,11 +4,11 @@ package common;
  * клиентом и сервером.
  */
 public enum MessageType {
-    TEST_CONNECTION,
     AUTHORIZATION,
     AUTHORIZATION_OK,
     REGISTRATION,
     REGISTRATION_OK,
+    DISCONNECTION,
 
 
     NAME_REQUEST,       //запрос имени.

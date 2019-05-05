@@ -1,9 +1,9 @@
 package command;
 
-import client.DBManager;
-import client.FileProperties;
-import client.FilesListManager;
+import client.*;
 import common.ConsoleHelper;
+import common.Message;
+import common.MessageType;
 import common.exception.PathIsNotFoundException;
 
 import static client.DBManager.deleteAllFromTable;
@@ -18,7 +18,6 @@ public class CommandEXIT extends CommandClientOnly {
     public void execute() throws Exception {
         try {
             FilesListManager filesListManager = getFilesList();
-            DBManager dbManager = new DBManager();
             deleteAllFromTable(); //перед каждым сохранением удаляем все из БД
             if (filesListManager.size() > 0){
                 for (FileProperties file : filesListManager.getFilesList()) {
@@ -34,6 +33,7 @@ public class CommandEXIT extends CommandClientOnly {
         } catch (PathIsNotFoundException e) {
             ConsoleHelper.writeMessage("Файл не был найден.");
         }
+        ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DISCONNECTION, Client.getClientName()));
         ConsoleHelper.writeMessage("До встречи!");
     }
 }

@@ -10,10 +10,13 @@ import java.net.Socket;
 
 public class Client {
 
-
+    private int clientName;
     private volatile boolean clientConnected = false;
     private ConnectionManager connectionManager;
 
+    public int getClientName() {
+        return clientName;
+    }
 
     public static void main(String[] args) throws Exception {
         //authorization block
@@ -70,12 +73,13 @@ public class Client {
      * @throws ClassNotFoundException
      */
     private void registration() throws IOException, ClassNotFoundException {
-        String clientName = getUserName();
-        String clientPassword = getUserPassword();
-        connectionManager.send(new Message(MessageType.REGISTRATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+        int clientName = getUserName().hashCode();
+        int clientPassword = getUserPassword().hashCode();
+        connectionManager.send(new Message(MessageType.REGISTRATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.REGISTRATION_OK) {
             clientConnected = true;
+            this.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
         if (message.getType() == MessageType.REGISTRATION) {
@@ -90,12 +94,13 @@ public class Client {
      * @throws ClassNotFoundException
      */
     private void authorization() throws IOException, ClassNotFoundException {
-        String clientName = getUserName();
-        String clientPassword = getUserPassword();
-        connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName.hashCode() + " " + clientPassword.hashCode())));
+        int clientName = getUserName().hashCode();
+        int clientPassword = getUserPassword().hashCode();
+        connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.AUTHORIZATION_OK) {
             clientConnected = true;
+            this.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
         if (message.getType() == MessageType.AUTHORIZATION) {

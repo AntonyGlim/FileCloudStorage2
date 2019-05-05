@@ -87,6 +87,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     fileOutputStream.write(messageFromClient.getBytes());
                     ctx.writeAndFlush(new Message(MessageType.FILE, "Файл передан успешно."));
                 }
+                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
+
+                }
             }
         } finally {
             ReferenceCountUtil.release(msg);
@@ -104,5 +107,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (pair.getKey() == name) return true;
         }
         return false;
+    }
+
+    private void deleteUserFromMap(){
+
     }
 }
