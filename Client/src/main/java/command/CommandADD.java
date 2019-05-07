@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CommandADD extends CommandClientOnly {
+public class CommandADD implements Command {
     public void execute() throws Exception {
         try {
             ConsoleHelper.writeMessage("Добавление нового файла в список файлов, для отправки на сервер.");

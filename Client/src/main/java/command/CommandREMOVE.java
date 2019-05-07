@@ -7,7 +7,7 @@ import common.exception.PathIsNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CommandREMOVE extends CommandClientOnly {
+public class CommandREMOVE implements Command {
     public void execute() throws Exception {
         try {
             ConsoleHelper.writeMessage("Удаление файла из списока файлов, для отправки на сервер.");

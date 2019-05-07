@@ -5,7 +5,7 @@ import client.FilesListManager;
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;
 
-public class CommandCONTENT extends CommandClientOnly {
+public class CommandCONTENT implements Command {
     public void execute() throws Exception {
         try {
             ConsoleHelper.writeMessage("Просмотр списока файлов, для отправки на сервер.");

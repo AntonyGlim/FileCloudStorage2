@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CommandUPLOAD extends CommandClientOnly {
+public class CommandUPLOAD implements Command {
     @Override
     public void execute() throws Exception {
         try {

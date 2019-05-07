@@ -13,7 +13,7 @@ import static client.DBManager.insertIntoTable;
 /**
  * The command is executed at the end of the program.
  */
-public class CommandEXIT extends CommandClientOnly {
+public class CommandEXIT implements Command {
 
     public void execute() throws Exception {
         try {
