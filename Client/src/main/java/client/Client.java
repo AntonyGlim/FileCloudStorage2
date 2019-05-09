@@ -24,7 +24,8 @@ public class Client {
             while (!clientConnected){
                 ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
                 try {
-                    int i = ConsoleHelper.readInt();
+//                    int i = ConsoleHelper.readInt();
+                    int i = 2;
                     if (i == 1) registration();
                     else if (i == 2) authorization();
                     else throw new InvalidInputFormatException();

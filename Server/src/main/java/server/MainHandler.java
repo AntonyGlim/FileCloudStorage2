@@ -13,6 +13,7 @@ import user.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
@@ -83,8 +84,12 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
                 if (messageFromClient.getType().equals(MessageType.FILE)){
-                    fileOutputStream = new FileOutputStream(messageFromClient.getFile().getName());
+                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    Path path = Paths.get(absolutePathName);
+                    if (!Files.exists(path)) Files.createDirectories(path);
+                    fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
+                    fileOutputStream.close();
                     ctx.writeAndFlush(new Message(MessageType.FILE, "Файл передан успешно."));
                 }
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
