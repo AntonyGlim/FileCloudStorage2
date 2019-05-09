@@ -13,7 +13,8 @@ public enum MessageType {
     DISCONNECTION_OK,
     UPLOAD_FILE,
     UPLOAD_FILE_OK,
-    FILE_OK
+    DOWNLOAD_FILE,
+    DOWNLOAD_FILE_OK,
 
 //    NAME_REQUEST,       //запрос имени.
 //    USER_NAME,          //имя пользователя.

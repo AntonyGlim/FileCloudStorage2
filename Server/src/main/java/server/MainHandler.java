@@ -3,6 +3,7 @@ package server;
 import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
+import common.exception.PathIsNotFoundException;
 import database.DBManager;
 import exeption.NoSuchUserException;
 import io.netty.channel.ChannelHandlerContext;
@@ -91,6 +92,12 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
                     ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
+                }
+                if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
+                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
+                    if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
+                    else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
                 }
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
                     int name = Integer.parseInt(messageFromClient.getText());

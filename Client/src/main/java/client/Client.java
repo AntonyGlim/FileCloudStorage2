@@ -85,6 +85,7 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - загрузить файл с сервера", ClientOperation.DOWNLOAD.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
