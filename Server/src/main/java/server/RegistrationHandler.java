@@ -6,11 +6,13 @@ import common.MessageType;
 import database.DBManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import user.User;
 
 import java.sql.SQLException;
 
 public class RegistrationHandler extends ChannelInboundHandlerAdapter {
 
+    private User user;
     private static DBManager dbManager = new DBManager();
 
     @Override
@@ -28,6 +30,7 @@ public class RegistrationHandler extends ChannelInboundHandlerAdapter {
                     long timeWhenAdd = System.currentTimeMillis();
                     long timeLastChange = timeWhenAdd;
                     dbManager.insertIntoTable(name, password, timeWhenAdd, timeLastChange);
+                    user = dbManager.returnUserFromDBbyNameAndPass(name, password);
                     Server.connectionUsersMap.put(name, System.currentTimeMillis());
                     ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
                     ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this

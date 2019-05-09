@@ -45,26 +45,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
 
-                if (messageFromClient.getType().equals(MessageType.AUTHORIZATION) && !clientConnected){
-                    String[] tokens = messageFromClient.getText().split(" ");
-                    String name = tokens[0];
-                    String password = tokens[1];
-                    if (!isContain(Server.connectionUsersMap, Integer.parseInt(name))){
-                        try{
-                            user = dbManager.returnUserFromDBbyNameAndPass(Integer.parseInt(name), Integer.parseInt(password));
-                            ConsoleHelper.writeMessage(user.toString());
-                            clientConnected = true;
-                            Server.connectionUsersMap.put(Integer.parseInt(name), System.currentTimeMillis());
-                            ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
-                            ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                        } catch (NoSuchUserException e){
-                            ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Не верное имя пользователя или пароль"));
-                        }
-                    } else {
-                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Пользователь с таким именем уже подключон."));
-                    }
-                }
-
+//
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
                     String absolutePathName = "Server/server_storage/" + user.getName() + "/";
                     Path path = Paths.get(absolutePathName);
@@ -80,11 +61,11 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
                     else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
                 }
-                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
-                    int name = Integer.parseInt(messageFromClient.getText());
-                    deleteUserFromMap(Server.connectionUsersMap, name);
-                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                }
+//                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
+//                    int name = Integer.parseInt(messageFromClient.getText());
+//                    deleteUserFromMap(Server.connectionUsersMap, name);
+//                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
+//                }
             }
         } finally {
             ReferenceCountUtil.release(msg);
@@ -97,16 +78,5 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    private boolean isContain(Map<Integer, Long> map, Integer name) {
-        for (Map.Entry pair : map.entrySet()) {
-            if (pair.getKey() == name) return true;
-        }
-        return false;
-    }
 
-    private void deleteUserFromMap(Map<Integer, Long> map, Integer name){
-        for (Map.Entry pair : map.entrySet()) {
-            if (pair.getKey() == name) map.remove(name);
-        }
-    }
 }

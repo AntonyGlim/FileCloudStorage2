@@ -38,6 +38,8 @@ public class Server {
                                     new ObjectDecoder(1024 * 1024 * 100 * 2, ClassResolvers.cacheDisabled(null)),
                                     new ObjectEncoder(),
                                     new RegistrationHandler(),
+                                    new AuthorizationHandler(),
+                                    new DisconnectionHandler(),
                                     new MainHandler()
                                     );
                         }
