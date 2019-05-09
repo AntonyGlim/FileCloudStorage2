@@ -11,7 +11,8 @@ public enum MessageType {
     REGISTRATION_OK,
     DISCONNECTION,
     DISCONNECTION_OK,
-    FILE,
+    UPLOAD_FILE,
+    UPLOAD_FILE_OK,
     FILE_OK
 
 //    NAME_REQUEST,       //запрос имени.

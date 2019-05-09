@@ -83,14 +83,14 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Пользователь с таким именем уже подключон."));
                     }
                 }
-                if (messageFromClient.getType().equals(MessageType.FILE)){
+                if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
                     String absolutePathName = "Server/server_storage/" + user.getName() + "/";
                     Path path = Paths.get(absolutePathName);
                     if (!Files.exists(path)) Files.createDirectories(path);
                     fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
-                    ctx.writeAndFlush(new Message(MessageType.FILE, "Файл передан успешно."));
+                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
                 }
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
                     int name = Integer.parseInt(messageFromClient.getText());
