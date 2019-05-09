@@ -44,27 +44,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
-                if (messageFromClient.getType().equals(MessageType.REGISTRATION) && !clientConnected){
 
-                    String[] tokens = messageFromClient.getText().split(" ");
-                    String name = tokens[0];
-                    String password = tokens[1];
-//                    if (!isContain(Server.connectionUsersMap, Integer.parseInt(name))){
-                        try {
-                            long timeWhenAdd = System.currentTimeMillis();
-                            long timeLastChange = timeWhenAdd;
-                            dbManager.insertIntoTable(Integer.parseInt(name), Integer.parseInt(password), timeWhenAdd, timeLastChange);
-                            clientConnected = true;
-                            Server.connectionUsersMap.put(Integer.parseInt(name), System.currentTimeMillis());
-                            ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
-                            ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                        } catch (SQLException e){
-                            ctx.writeAndFlush(new Message(MessageType.REGISTRATION, "Пользователь с таким именем уже существует."));
-                        }
-//                    } else {
-//                        ctx.writeAndFlush(new Message(MessageType.REGISTRATION, "Пользователь с таким именем уже подключон."));
-//                    }
-                }
                 if (messageFromClient.getType().equals(MessageType.AUTHORIZATION) && !clientConnected){
                     String[] tokens = messageFromClient.getText().split(" ");
                     String name = tokens[0];
@@ -84,6 +64,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Пользователь с таким именем уже подключон."));
                     }
                 }
+
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
                     String absolutePathName = "Server/server_storage/" + user.getName() + "/";
                     Path path = Paths.get(absolutePathName);
