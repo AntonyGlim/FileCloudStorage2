@@ -14,6 +14,8 @@ import java.sql.SQLException;
 public class RegistrationHandler extends ChannelInboundHandlerAdapter {
 
     private static DBManager dbManager = new DBManager();
+    private static MainHandler mainHandler = MainHandler.getMainHandler();
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -31,7 +33,7 @@ public class RegistrationHandler extends ChannelInboundHandlerAdapter {
                         long timeWhenAdd = System.currentTimeMillis();
                         long timeLastChange = timeWhenAdd;
                         dbManager.insertIntoTable(name, password, timeWhenAdd, timeLastChange);
-                        MainHandler.user = dbManager.returnUserFromDBbyNameAndPass(name, password);
+                        mainHandler.setUser(dbManager.returnUserFromDBbyNameAndPass(name, password));
                         Server.connectionUsersMap.put(name, System.currentTimeMillis());
                         ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
                         ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this

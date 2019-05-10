@@ -11,6 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileOutHandler extends ChannelInboundHandlerAdapter {
+
+    private static MainHandler mainHandler = MainHandler.getMainHandler();
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
@@ -18,7 +21,7 @@ public class FileOutHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)) {
-                    String absolutePathName = "Server/server_storage/" + MainHandler.user.getName() + "/";
+                    String absolutePathName = "Server/server_storage/" + mainHandler.getUser().getName() + "/";
                     Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
                     if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
                     else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
