@@ -41,6 +41,7 @@ public class CommandUPLOAD implements Command {
                     i++;
                 }
                 fileInputStream.close();
+                ConnectionManager.getConnectionManager(null).send(new Message(MessageType.UPLOAD_BIG_FILE_END));
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             }
 
