@@ -19,7 +19,7 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        try{
+//        try{
             if (msg == null) return;
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
@@ -47,9 +47,9 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
                     ctx.fireChannelRead(msg);
                 }
             }
-        } finally {
-            ReferenceCountUtil.release(msg);
-        }
+//        } finally {
+//            ReferenceCountUtil.release(msg);
+//        }
     }
 
     @Override
