@@ -7,6 +7,7 @@ import database.DBManager;
 import exeption.NoSuchUserException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.ReferenceCountUtil;
 import user.User;
 
 import java.util.Map;
@@ -18,32 +19,36 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg == null) return;
-        if (msg instanceof Message) {
-            Message messageFromClient = (Message) msg;
-            if (messageFromClient.getType().equals(MessageType.AUTHORIZATION)){
+        try{
+            if (msg == null) return;
+            if (msg instanceof Message) {
+                Message messageFromClient = (Message) msg;
+                if (messageFromClient.getType().equals(MessageType.AUTHORIZATION)){
 
-                String[] tokens = messageFromClient.getText().split(" ");
-                int name = Integer.parseInt(tokens[0]);
-                int password = Integer.parseInt(tokens[1]);
+                    String[] tokens = messageFromClient.getText().split(" ");
+                    int name = Integer.parseInt(tokens[0]);
+                    int password = Integer.parseInt(tokens[1]);
 
-                if (!isContain(Server.connectionUsersMap, name)){
-                    try{
-                        user = dbManager.returnUserFromDBbyNameAndPass(name, password);
-                        ConsoleHelper.writeMessage(user.toString());
-                        Server.connectionUsersMap.put(name, System.currentTimeMillis());
-                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
-                        ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                    } catch (NoSuchUserException e){
-                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Не верное имя пользователя или пароль"));
+                    if (!isContain(Server.connectionUsersMap, name)){
+                        try{
+                            user = dbManager.returnUserFromDBbyNameAndPass(name, password);
+                            ConsoleHelper.writeMessage(user.toString());
+                            Server.connectionUsersMap.put(name, System.currentTimeMillis());
+                            ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
+                            ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
+                        } catch (NoSuchUserException e){
+                            ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Не верное имя пользователя или пароль"));
+                        }
+                    } else {
+                        ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Пользователь с таким именем уже подключон."));
                     }
-                } else {
-                    ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION, "Пользователь с таким именем уже подключон."));
-                }
 
-            } else {
-                ctx.fireChannelRead(msg);
+                } else {
+                    ctx.fireChannelRead(msg);
+                }
             }
+        } finally {
+            ReferenceCountUtil.release(msg);
         }
     }
 
