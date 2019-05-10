@@ -40,6 +40,7 @@ public class Server {
                                     new RegistrationHandler(),
                                     new AuthorizationHandler(),
                                     new FileInHandler(),
+                                    new FileOutHandler(),
                                     new DisconnectionHandler(),
                                     new MainHandler()
                                     );

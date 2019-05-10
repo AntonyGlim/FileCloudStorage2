@@ -46,21 +46,13 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 Message messageFromClient = (Message) msg;
 
 //
-//                if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
+//
+//                if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
 //                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
-//                    Path path = Paths.get(absolutePathName);
-//                    if (!Files.exists(path)) Files.createDirectories(path);
-//                    fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());
-//                    fileOutputStream.write(messageFromClient.getBytes());
-//                    fileOutputStream.close();
-//                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
+//                    Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
+//                    if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
+//                    else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
 //                }
-                if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
-                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
-                    Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
-                    if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
-                    else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
-                }
             }
         } finally {
             ReferenceCountUtil.release(msg);
