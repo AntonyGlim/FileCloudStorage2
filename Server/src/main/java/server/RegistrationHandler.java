@@ -6,6 +6,7 @@ import common.MessageType;
 import database.DBManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.ReferenceCountUtil;
 import user.User;
 
 import java.sql.SQLException;
@@ -17,29 +18,33 @@ public class RegistrationHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg == null) return;
-        if (msg instanceof Message) {
-            Message messageFromClient = (Message) msg;
-            if (messageFromClient.getType().equals(MessageType.REGISTRATION)){
+        try {
+            if (msg == null) return;
+            if (msg instanceof Message) {
+                Message messageFromClient = (Message) msg;
+                if (messageFromClient.getType().equals(MessageType.REGISTRATION)){
 
-                String[] tokens = messageFromClient.getText().split(" ");
-                int name = Integer.parseInt(tokens[0]);
-                int password = Integer.parseInt(tokens[1]);
+                    String[] tokens = messageFromClient.getText().split(" ");
+                    int name = Integer.parseInt(tokens[0]);
+                    int password = Integer.parseInt(tokens[1]);
 
-                try {
-                    long timeWhenAdd = System.currentTimeMillis();
-                    long timeLastChange = timeWhenAdd;
-                    dbManager.insertIntoTable(name, password, timeWhenAdd, timeLastChange);
-                    user = dbManager.returnUserFromDBbyNameAndPass(name, password);
-                    Server.connectionUsersMap.put(name, System.currentTimeMillis());
-                    ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
-                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                } catch (SQLException e){
-                    ctx.writeAndFlush(new Message(MessageType.REGISTRATION, "Пользователь с таким именем уже существует."));
+                    try {
+                        long timeWhenAdd = System.currentTimeMillis();
+                        long timeLastChange = timeWhenAdd;
+                        dbManager.insertIntoTable(name, password, timeWhenAdd, timeLastChange);
+                        user = dbManager.returnUserFromDBbyNameAndPass(name, password);
+                        Server.connectionUsersMap.put(name, System.currentTimeMillis());
+                        ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
+                        ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
+                    } catch (SQLException e){
+                        ctx.writeAndFlush(new Message(MessageType.REGISTRATION, "Пользователь с таким именем уже существует."));
+                    }
+                } else {
+                    ctx.fireChannelRead(msg);
                 }
-            } else {
-                ctx.fireChannelRead(msg);
             }
+        } finally {
+            ReferenceCountUtil.release(msg);
         }
     }
 
