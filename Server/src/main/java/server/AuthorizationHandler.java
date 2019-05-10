@@ -15,6 +15,7 @@ import java.util.Map;
 public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
     private static DBManager dbManager = new DBManager();
+    private static MainHandler mainHandler = MainHandler.getMainHandler();
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -30,8 +31,8 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
                     if (!isContain(Server.connectionUsersMap, name)){
                         try{
-                            MainHandler.user = dbManager.returnUserFromDBbyNameAndPass(name, password);
-                            ConsoleHelper.writeMessage(MainHandler.user.toString());
+                            mainHandler.setUser(dbManager.returnUserFromDBbyNameAndPass(name, password));
+                            ConsoleHelper.writeMessage(mainHandler.getUser().toString());
                             Server.connectionUsersMap.put(name, System.currentTimeMillis());
                             ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
                             ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
