@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
-    private User user;
     private static DBManager dbManager = new DBManager();
 
     @Override
@@ -31,8 +30,8 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter {
 
                     if (!isContain(Server.connectionUsersMap, name)){
                         try{
-                            user = dbManager.returnUserFromDBbyNameAndPass(name, password);
-                            ConsoleHelper.writeMessage(user.toString());
+                            MainHandler.user = dbManager.returnUserFromDBbyNameAndPass(name, password);
+                            ConsoleHelper.writeMessage(MainHandler.user.toString());
                             Server.connectionUsersMap.put(name, System.currentTimeMillis());
                             ctx.writeAndFlush(new Message(MessageType.AUTHORIZATION_OK, "Вход выполнен успешно."));
                             ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
