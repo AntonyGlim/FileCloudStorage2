@@ -12,9 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileInHandler extends ChannelInboundHandlerAdapter {
-
-    private static MainHandler mainHandler = MainHandler.getMainHandler();
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         try {
@@ -22,7 +19,7 @@ public class FileInHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)) {
-                    String absolutePathName = "Server/server_storage/" + mainHandler.getUser().getName() + "/";
+                    String absolutePathName = "Server/server_storage/" + MainHandler.user.getName() + "/";
                     Path path = Paths.get(absolutePathName);
                     if (!Files.exists(path)) Files.createDirectories(path);
                     try(FileOutputStream fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());){
