@@ -24,6 +24,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
     private volatile boolean clientConnected = false;
     private User user;
     private static DBManager dbManager = new DBManager();
+    private String bigFileName = "";
 
     /**
      * The method is executed once,
@@ -88,6 +89,20 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
                     ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
+                }
+
+                if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
+                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    Path path = Paths.get(absolutePathName);
+                    if (!Files.exists(path)) Files.createDirectories(path);
+//                    if (bigFileName.equals("")) {
+//                        bigFileName = messageFromClient.getFile().getName();
+//                    }
+//                    String fileName = messageFromClient.getFile().getName();
+                    fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName(), true);
+                    fileOutputStream.write(messageFromClient.getBytes());
+                    fileOutputStream.close();
+//                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){

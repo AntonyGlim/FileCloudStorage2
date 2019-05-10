@@ -33,9 +33,18 @@ public class Message implements Serializable {
         this.type = type;
         this.text = null;
         this.file = file;
-        FileInputStream fileInputStream = new FileInputStream(file);
-        bytes = new byte[(int)file.length()];
-        fileInputStream.read(bytes);
+        try (FileInputStream fileInputStream = new FileInputStream(file)){
+            bytes = new byte[(int)file.length()];
+            fileInputStream.read(bytes);
+        }
+    }
+
+    /** For big files (part by part sending) */
+    public Message(MessageType type, File file, String text, byte[] bytes) throws IOException {
+        this.type = type;
+        this.file = file;
+        this.text = text;
+        this.bytes = bytes;
     }
 
     public MessageType getType() {
