@@ -39,6 +39,7 @@ public class Server {
                                     new ObjectEncoder(),
                                     new RegistrationHandler(),
                                     new AuthorizationHandler(),
+                                    new FileInHandler(),
                                     new DisconnectionHandler(),
                                     new MainHandler()
                                     );
