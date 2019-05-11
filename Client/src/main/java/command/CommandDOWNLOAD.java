@@ -20,16 +20,34 @@ public class CommandDOWNLOAD implements Command {
         ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DOWNLOAD_FILE, ConsoleHelper.readString()));
 
         Message message = ConnectionManager.getConnectionManager(null).receive();
-        if (message.getType() == MessageType.DOWNLOAD_FILE_OK){
+        FileOutputStream fileOutputStream = null;
+
+        if (message.getType() == MessageType.DOWNLOAD_FILE_OK || message.getType() == MessageType.DOWNLOAD_BIG_FILE){
             String absolutePathName = "Client/client_storage/";
             Path path = Paths.get(absolutePathName);
             if (!Files.exists(path)) Files.createDirectories(path);
-            FileOutputStream fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName());
-            fileOutputStream.write(message.getBytes());
+            if (message.getType() == MessageType.DOWNLOAD_FILE_OK){
+                fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName());
+                fileOutputStream.write(message.getBytes());
+                fileOutputStream.close();
+                ConsoleHelper.writeMessage("Файл успешно загружен.");
+            }
+            if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
+                if (fileOutputStream == null)
+                    fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
+                fileOutputStream.write(message.getBytes());
+
+            }
+        }
+
+        if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END) {
             fileOutputStream.close();
             ConsoleHelper.writeMessage("Файл успешно загружен.");
-        } else {
+        }
+
+        if (message.getType() == MessageType.DOWNLOAD_FILE){
             ConsoleHelper.writeMessage(message.getText());
         }
     }
 }
+

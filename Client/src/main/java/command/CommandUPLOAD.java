@@ -36,7 +36,7 @@ public class CommandUPLOAD implements Command {
                             MessageType.UPLOAD_BIG_FILE,
                             sourcePath.toFile(),
                             Integer.toString(i),
-                            buffer
+                            buffer  //TODO write(buffer, 0, count);
                     ));
                     i++;
                 }

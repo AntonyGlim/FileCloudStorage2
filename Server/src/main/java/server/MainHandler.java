@@ -12,6 +12,7 @@ import io.netty.util.ReferenceCountUtil;
 import user.User;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -107,7 +108,25 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     String absolutePathName = "Server/server_storage/" + user.getName() + "/";
                     Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
                     if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
-                    else ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
+                    else if (sourcePath.toFile().length() <= 1024 * 1024 * 100){
+                        ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
+                    } else {
+                        FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
+                        byte[] buffer = new byte[1024 * 512];
+                        int i = 0;
+                        while (fileInputStream.available() > 0) {
+                            int count = fileInputStream.read(buffer);
+                            ctx.writeAndFlush(new Message(
+                                    MessageType.DOWNLOAD_BIG_FILE,
+                                    sourcePath.toFile(),
+                                    Integer.toString(i),
+                                    buffer
+                            ));
+                            i++;
+                        }
+                        fileInputStream.close();
+                        ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, "Передача файла завершена"));
+                    }
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
