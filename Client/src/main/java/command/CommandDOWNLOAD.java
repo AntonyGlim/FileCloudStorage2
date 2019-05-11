@@ -33,17 +33,21 @@ public class CommandDOWNLOAD implements Command {
                 ConsoleHelper.writeMessage("Файл успешно загружен.");
             }
             if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
-                if (fileOutputStream == null)
-                    fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
-                fileOutputStream.write(message.getBytes());
-
+                while (!(message.getType() == MessageType.DOWNLOAD_BIG_FILE_END)){
+                    if (fileOutputStream == null)
+                        fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
+                    fileOutputStream.write(message.getBytes());
+                    message = ConnectionManager.getConnectionManager(null).receive();
+                }
+                fileOutputStream.close();
+                ConsoleHelper.writeMessage("Файл успешно загружен.");
             }
         }
 
-        if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END) {
-            fileOutputStream.close();
-            ConsoleHelper.writeMessage("Файл успешно загружен.");
-        }
+//        if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END) {
+//            fileOutputStream.close();
+//            ConsoleHelper.writeMessage("Файл успешно загружен.");
+//        }
 
         if (message.getType() == MessageType.DOWNLOAD_FILE){
             ConsoleHelper.writeMessage(message.getText());
