@@ -115,6 +115,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         byte[] buffer = new byte[1024 * 512];
                         int i = 0;
                         while (fileInputStream.available() > 0) {
+                            System.out.println(i);
                             int count = fileInputStream.read(buffer);
                             ctx.writeAndFlush(new Message(
                                     MessageType.DOWNLOAD_BIG_FILE,
@@ -123,9 +124,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                                     buffer
                             ));
                             i++;
+                            Thread.sleep(100);
                         }
                         fileInputStream.close();
-                        ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, "Передача файла завершена"));
+                        ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, Integer.toString(i)));
                     }
                 }
 
