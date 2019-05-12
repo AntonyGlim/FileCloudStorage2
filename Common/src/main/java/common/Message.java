@@ -1,6 +1,7 @@
 package common;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Класс, отвечающий за пересылаемые сообщения
@@ -16,6 +17,7 @@ public class Message implements Serializable {
     private final String text; //будет содержать текст сообщения
     private final File file; //будет содержать файл для пересылки
     private byte[] bytes; //собственно в массиве будет храниться тело файла
+    private ArrayList<FileProperties> fileList;
 
     public Message(MessageType type) {
         this.type = type;
@@ -47,6 +49,13 @@ public class Message implements Serializable {
         this.bytes = bytes;
     }
 
+    public Message(MessageType type, ArrayList<FileProperties> fileList){
+        this.type = type;
+        this.fileList = fileList;
+        this.text = null;
+        this.file = null;
+    }
+
     public MessageType getType() {
         return type;
     }
@@ -61,5 +70,9 @@ public class Message implements Serializable {
 
     public byte[] getBytes() {
         return bytes;
+    }
+
+    public ArrayList<FileProperties> getFileList() {
+        return fileList;
     }
 }

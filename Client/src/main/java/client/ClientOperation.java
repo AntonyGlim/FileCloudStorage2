@@ -7,5 +7,6 @@ public enum  ClientOperation {
     REFRESH,
     UPLOAD,
     DOWNLOAD,
+    FILELIST,
     EXIT
 }

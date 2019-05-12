@@ -86,6 +86,7 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - загрузить файл с сервера", ClientOperation.DOWNLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - список файлов на сервере", ClientOperation.FILELIST.ordinal()));
         ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
@@ -165,8 +166,8 @@ public class Client {
 
     protected static String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
-//        String userName = ConsoleHelper.readString();
-        String userName = "2";                                 //TODO delete this
+        String userName = ConsoleHelper.readString();
+//        String userName = "2";                                 //TODO delete this
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
@@ -174,8 +175,8 @@ public class Client {
 
     protected static String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
-//        String userPassword = ConsoleHelper.readString();
-        String userPassword = "2";                        //TODO delete this
+        String userPassword = ConsoleHelper.readString();
+//        String userPassword = "2";                        //TODO delete this
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }

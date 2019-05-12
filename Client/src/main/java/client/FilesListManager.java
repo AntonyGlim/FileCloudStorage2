@@ -1,6 +1,7 @@
 package client;
 
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.exception.FileAlreadyExistException;
 import common.exception.PathIsNotFoundException;
 

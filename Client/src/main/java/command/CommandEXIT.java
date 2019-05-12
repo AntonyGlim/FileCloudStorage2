@@ -2,6 +2,7 @@ package command;
 
 import client.*;
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.Message;
 import common.MessageType;
 import common.exception.PathIsNotFoundException;

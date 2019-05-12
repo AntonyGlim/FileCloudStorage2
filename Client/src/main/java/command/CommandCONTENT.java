@@ -1,6 +1,6 @@
 package command;
 
-import client.FileProperties;
+import common.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;

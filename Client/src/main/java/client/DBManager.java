@@ -1,9 +1,9 @@
 package client;
 
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.exception.PathIsNotFoundException;
 
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Date;
 

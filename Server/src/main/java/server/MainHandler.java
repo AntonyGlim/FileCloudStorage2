@@ -83,7 +83,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
-                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    String absolutePathName = user.getFolderName();
                     Path path = Paths.get(absolutePathName);
                     if (!Files.exists(path)) Files.createDirectories(path);
                     fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());
@@ -93,7 +93,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
-                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    String absolutePathName = user.getFolderName();
                     Path path = Paths.get(absolutePathName);
                     if (!Files.exists(path)) Files.createDirectories(path);
                     fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName(), true);
@@ -105,7 +105,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
-                    String absolutePathName = "Server/server_storage/" + user.getName() + "/";
+                    String absolutePathName = user.getFolderName();
                     Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
                     if (Files.notExists(sourcePath)) ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE, "Файл не найден"));
                     else if (sourcePath.toFile().length() <= 1024 * 1024 * 100){
@@ -141,6 +141,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         fileInputStream.close();
                         ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, Integer.toString(i)));
                     }
+                }
+
+                if (messageFromClient.getType().equals(MessageType.FILE_LIST)){
+                    ctx.writeAndFlush(new Message(MessageType.FILE_LIST_OK, user.getFileList()));
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){

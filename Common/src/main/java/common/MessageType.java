@@ -23,4 +23,7 @@ public enum MessageType {
     DOWNLOAD_FILE_OK,
     DOWNLOAD_BIG_FILE,
     DOWNLOAD_BIG_FILE_END,
+
+    FILE_LIST,
+    FILE_LIST_OK,
 }
