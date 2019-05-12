@@ -26,4 +26,7 @@ public enum MessageType {
 
     FILE_LIST,
     FILE_LIST_OK,
+
+    DELETE_FILE_FROM_SERVER,
+    DELETE_FILE_FROM_SERVER_OK,
 }

@@ -1,6 +1,7 @@
 package server;
 
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.Message;
 import common.MessageType;
 import common.exception.PathIsNotFoundException;
@@ -145,6 +146,22 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
                 if (messageFromClient.getType().equals(MessageType.FILE_LIST)){
                     ctx.writeAndFlush(new Message(MessageType.FILE_LIST_OK, user.getFileList()));
+                }
+
+                if (messageFromClient.getType().equals(MessageType.DELETE_FILE_FROM_SERVER)){
+                    String fileToDeleteName = messageFromClient.getText();
+                    if (user.getFileList() != null){
+                        for (FileProperties file : user.getFileList()) {
+                            if ((file.getName()).equals(fileToDeleteName)){
+                                Files.delete(Paths.get(file.getAbsolutePath()));
+                                ctx.writeAndFlush(new Message(MessageType.DELETE_FILE_FROM_SERVER_OK, "Файл успешно удален"));
+                                break;
+                            }
+                            ctx.writeAndFlush(new Message(MessageType.DELETE_FILE_FROM_SERVER, "Файл не найден"));
+                        }
+                    } else {
+                        ctx.writeAndFlush(new Message(MessageType.DELETE_FILE_FROM_SERVER, "Файл не найден"));
+                    }
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){

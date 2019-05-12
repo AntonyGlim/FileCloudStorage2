@@ -16,6 +16,7 @@ public class CommandExecutor {
         allKnownCommandsMap.put(ClientOperation.UPLOAD, new CommandUPLOAD());
         allKnownCommandsMap.put(ClientOperation.DOWNLOAD, new CommandDOWNLOAD());
         allKnownCommandsMap.put(ClientOperation.FILELIST, new CommandFILELIST());
+        allKnownCommandsMap.put(ClientOperation.DELETEFILEFROMSERVER, new CommandDELETEFILEFROMSERVER());
         allKnownCommandsMap.put(ClientOperation.EXIT, new CommandEXIT());
     }
 

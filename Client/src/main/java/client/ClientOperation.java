@@ -8,5 +8,6 @@ public enum  ClientOperation {
     UPLOAD,
     DOWNLOAD,
     FILELIST,
+    DELETEFILEFROMSERVER,
     EXIT
 }
