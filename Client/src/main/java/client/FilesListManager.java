@@ -6,6 +6,7 @@ import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class FilesListManager {
         if(!file.isFileExist()){
             throw new PathIsNotFoundException();
         }
-        if (filesListContainsPath(file.getAbsolutePath())){
+        if (filesListContainsPath(Paths.get(file.getAbsolutePath()))){
             throw new FileAlreadyExistException();
         } else {
             this.filesList.add(file);

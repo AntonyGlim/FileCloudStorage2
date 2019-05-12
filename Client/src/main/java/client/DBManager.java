@@ -74,7 +74,7 @@ public class DBManager {
                 filesListManager.addFileFromDB(new FileProperties(
                         rs.getString(2),
                         rs.getLong(3),
-                        Paths.get(rs.getString(4)),
+                        rs.getString(4),
                         new Date(rs.getLong(5))
                 ));
             }

@@ -21,7 +21,7 @@ public class CommandADD implements Command {
 
             Path sourcePath = Paths.get(ConsoleHelper.readString());
             if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
-            filesListManager.addFile(new FileProperties(sourcePath));
+            filesListManager.addFile(new FileProperties(sourcePath.toString()));
 
             ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 
