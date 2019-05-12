@@ -41,7 +41,7 @@ public class CommandDOWNLOAD implements Command {
                     ConsoleHelper.writeMessage(message.getText());
                     message = ConnectionManager.getConnectionManager(null).receive();
                     if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
-                        Thread.sleep(10000);
+                        Thread.sleep(20000);
                         break;
                     }
                 }
@@ -49,11 +49,6 @@ public class CommandDOWNLOAD implements Command {
                 ConsoleHelper.writeMessage("Файл успешно загружен.");
             }
         }
-
-//        if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END) {
-//            fileOutputStream.close();
-//            ConsoleHelper.writeMessage("Файл успешно загружен.");
-//        }
 
         if (message.getType() == MessageType.DOWNLOAD_FILE){
             ConsoleHelper.writeMessage(message.getText());

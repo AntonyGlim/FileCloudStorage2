@@ -124,7 +124,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                                     buffer
                             ));
                             i++;
-                            Thread.sleep(100);
+                            Thread.sleep(10);
                         }
                         fileInputStream.close();
                         ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, Integer.toString(i)));

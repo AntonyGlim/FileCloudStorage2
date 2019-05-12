@@ -28,16 +28,28 @@ public class CommandUPLOAD implements Command {
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             } else {
                 FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
-                byte[] buffer = new byte[1024 * 1024 * 4];
+                int bufferLength = 1024 * 1024 * 4; //4 mb
+                byte[] buffer = new byte[bufferLength];
                 int i = 0;
                 while (fileInputStream.available() > 0) {
                     int count = fileInputStream.read(buffer);
-                    ConnectionManager.getConnectionManager(null).send(new Message(
-                            MessageType.UPLOAD_BIG_FILE,
-                            sourcePath.toFile(),
-                            Integer.toString(i),
-                            buffer  //TODO write(buffer, 0, count);
-                    ));
+                    if (count == bufferLength) {
+                        ConnectionManager.getConnectionManager(null).send(new Message(
+                                MessageType.UPLOAD_BIG_FILE,
+                                sourcePath.toFile(),
+                                Integer.toString(i),
+                                buffer
+                        ));
+                    } else {
+                        byte[] buffer2 = new byte[count];
+                        fileInputStream.read(buffer2);
+                        ConnectionManager.getConnectionManager(null).send(new Message(
+                                MessageType.UPLOAD_BIG_FILE,
+                                sourcePath.toFile(),
+                                Integer.toString(i),
+                                buffer2
+                        ));
+                    }
                     i++;
                 }
                 fileInputStream.close();
