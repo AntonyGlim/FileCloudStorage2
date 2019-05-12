@@ -112,19 +112,31 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
                     } else {
                         FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
-                        byte[] buffer = new byte[1024 * 512];
+                        int bufferLength = 1024 * 512; //512 kb
+                        byte[] buffer = new byte[bufferLength];
                         int i = 0;
                         while (fileInputStream.available() > 0) {
-                            System.out.println(i);
+                            System.out.println(i); //TODO delete this
                             int count = fileInputStream.read(buffer);
-                            ctx.writeAndFlush(new Message(
-                                    MessageType.DOWNLOAD_BIG_FILE,
-                                    sourcePath.toFile(),
-                                    Integer.toString(i),
-                                    buffer
-                            ));
+                            if (count == bufferLength) {
+                                ctx.writeAndFlush(new Message(
+                                        MessageType.DOWNLOAD_BIG_FILE,
+                                        sourcePath.toFile(),
+                                        Integer.toString(i),
+                                        buffer
+                                ));
+                                Thread.sleep(10); //TODO delete this
+                            } else {
+                                byte[] buffer2 = new byte[count];
+                                fileInputStream.read(buffer2);
+                                ctx.writeAndFlush(new Message(
+                                        MessageType.DOWNLOAD_BIG_FILE,
+                                        sourcePath.toFile(),
+                                        Integer.toString(i),
+                                        buffer2
+                                ));
+                            }
                             i++;
-                            Thread.sleep(10);
                         }
                         fileInputStream.close();
                         ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_BIG_FILE_END, Integer.toString(i)));

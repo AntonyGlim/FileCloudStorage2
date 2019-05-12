@@ -33,7 +33,6 @@ public class CommandDOWNLOAD implements Command {
                 ConsoleHelper.writeMessage("Файл успешно загружен.");
             }
             if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
-                int partCount = 0;
                 while (true){
                     if (fileOutputStream == null)
                         fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName() /*+ "_part" + part++*/, true);
@@ -41,7 +40,7 @@ public class CommandDOWNLOAD implements Command {
                     ConsoleHelper.writeMessage(message.getText());
                     message = ConnectionManager.getConnectionManager(null).receive();
                     if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
-                        Thread.sleep(20000);
+                        Thread.sleep(20000);  //костыль TODO delete this
                         break;
                     }
                 }
