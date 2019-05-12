@@ -39,9 +39,9 @@ public class CommandDOWNLOAD implements Command {
                         fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName() /*+ "_part" + part++*/, true);
                     fileOutputStream.write(message.getBytes());
                     ConsoleHelper.writeMessage(message.getText());
-                    ConnectionManager.getConnectionManager(null).send(new Message(MessageType));
                     message = ConnectionManager.getConnectionManager(null).receive();
                     if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
+                        Thread.sleep(10000);
                         break;
                     }
                 }
