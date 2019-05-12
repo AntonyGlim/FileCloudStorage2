@@ -61,12 +61,16 @@ public class User {
     public ArrayList<FileProperties> getFileList() {
         fileList = new ArrayList<>();
         File folder = new File(folderName);
-        for (File file : folder.listFiles())
-        {
-            fileList.add(new FileProperties(file.getName(), file.length(), file.getAbsolutePath(), new Date(file.lastModified())));
-            System.out.println(file.getName());
+        if (folder.exists()){
+            for (File file : folder.listFiles())
+            {
+                fileList.add(new FileProperties(file.getName(), file.length(), file.getAbsolutePath(), new Date(file.lastModified())));
+                System.out.println(file.getName());
+            }
+            return fileList;
+        } else {
+            return null;
         }
-        return fileList;
     }
 
     @Override
