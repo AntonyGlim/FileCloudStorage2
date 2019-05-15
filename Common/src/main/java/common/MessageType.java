@@ -12,8 +12,6 @@ public enum MessageType {
     REGISTRATION,
     REGISTRATION_OK,
 
-    DISCONNECTION,
-
     UPLOAD_FILE,
     UPLOAD_FILE_OK,
     UPLOAD_BIG_FILE,

@@ -7,8 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Server" />
-        <module name="Common" />
         <module name="Client" />
+        <module name="Common" />
       </profile>
     </annotationProcessing>
   </component>

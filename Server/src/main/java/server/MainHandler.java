@@ -4,7 +4,6 @@ import common.ConsoleHelper;
 import common.FileProperties;
 import common.Message;
 import common.MessageType;
-import common.exception.PathIsNotFoundException;
 import database.DBManager;
 import exeption.NoSuchUserException;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +11,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 import user.User;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -163,13 +161,6 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         ctx.writeAndFlush(new Message(MessageType.DELETE_FILE_FROM_SERVER, "Файл не найден"));
                     }
                 }
-
-//                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
-//                    int name = Integer.parseInt(messageFromClient.getText());
-//                    deleteUserFromMap(Server.connectionUsersMap, name);
-//                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-//                }
-
             }
         } finally {
             ReferenceCountUtil.release(msg);
