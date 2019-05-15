@@ -23,8 +23,8 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
     private volatile boolean clientConnected = false;
     private User user;
-    private static DBManager dbManager = new DBManager();
-    private String bigFileName = "";
+//    private DBManager dbManager = new DBManager();
+//    private String bigFileName = "";
 
     /**
      * The method is executed once,
@@ -51,7 +51,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     try {
                         long timeWhenAdd = System.currentTimeMillis();
                         long timeLastChange = timeWhenAdd;
-                        dbManager.insertIntoTable(Integer.parseInt(name), Integer.parseInt(password), timeWhenAdd, timeLastChange);
+                        DBManager.insertIntoTable(Integer.parseInt(name), Integer.parseInt(password), timeWhenAdd, timeLastChange);
                         clientConnected = true;
                         Server.connectionUsersMap.put(Integer.parseInt(name), System.currentTimeMillis());
                         ctx.writeAndFlush(new Message(MessageType.REGISTRATION_OK, "Регистрация выполнена успешно."));
@@ -67,7 +67,8 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     String password = tokens[1];
                     if (!isContain(Server.connectionUsersMap, Integer.parseInt(name))){
                         try{
-                            user = dbManager.returnUserFromDBbyNameAndPass(Integer.parseInt(name), Integer.parseInt(password));
+                            user = DBManager.returnUserFromDBbyNameAndPass(Integer.parseInt(name), Integer.parseInt(password));
+                            DBManager.updateUserTimeLastVisit(user.getName());
                             ConsoleHelper.writeMessage(user.toString());
                             clientConnected = true;
                             Server.connectionUsersMap.put(Integer.parseInt(name), System.currentTimeMillis());

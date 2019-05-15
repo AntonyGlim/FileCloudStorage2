@@ -1,8 +1,10 @@
 package user;
 
+import common.ConsoleHelper;
 import common.FileProperties;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,46 +28,29 @@ public class User {
         return name;
     }
 
-    public void setName(int name) {
-        this.name = name;
-    }
-
-    public int getPassword() {
-        return password;
-    }
-
-    public void setPassword(int password) {
-        this.password = password;
-    }
-
-    public long getRegistration_date() {
-        return registration_date;
-    }
-
-    public void setRegistration_date(long registration_date) {
-        this.registration_date = registration_date;
-    }
-
-    public long getTime_last_visit() {
-        return time_last_visit;
-    }
-
-    public void setTime_last_visit(long time_last_visit) {
-        this.time_last_visit = time_last_visit;
-    }
-
     public String getFolderName() {
         return folderName;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<FileProperties> getFileList() {
         fileList = new ArrayList<>();
         File folder = new File(folderName);
         if (folder.exists()){
             for (File file : folder.listFiles())
             {
-                fileList.add(new FileProperties(file.getName(), file.length(), file.getAbsolutePath(), new Date(file.lastModified())));
-                System.out.println(file.getName());
+                fileList.add(
+                        new FileProperties(
+                                file.getName(),
+                                file.length(),
+                                file.getAbsolutePath(),
+                                new Date(file.lastModified())
+                        )
+                );
+                ConsoleHelper.writeMessage(file.getName()); //TODO delete this
             }
             return fileList;
         } else {
@@ -75,6 +60,14 @@ public class User {
 
     @Override
     public String toString() {
-        return name + " " + registration_date + " " + time_last_visit;
+        String pattern = "yyyy.MM.dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String registration_date = simpleDateFormat.format(this.registration_date);
+        String time_last_visit = simpleDateFormat.format(this.time_last_visit);
+        return (
+                "Client name: " + this.name +
+                ", registration date: " + registration_date +
+                ", time last visit: " + time_last_visit
+        );
     }
 }

@@ -16,14 +16,14 @@ public class DBManager {
     private static String tableName = "users";
 
     /** Database connection */
-    private static void connect() throws ClassNotFoundException, SQLException {
+    private static synchronized void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:Server/src/main/java/database/" + tableName + ".db");
         statement = connection.createStatement();
     }
 
     /** Database disconnection */
-    private static void disconnect(){
+    private static synchronized void disconnect(){
         try {
             connection.close();
         } catch (SQLException e) {
@@ -32,11 +32,17 @@ public class DBManager {
     }
 
     /** Add an entry to the table */
-    public static void insertIntoTable(int name, int password, long timeWhenAdd, long timeLastVisit) throws SQLException {
+    public static synchronized void insertIntoTable(int name, int password, long timeWhenAdd, long timeLastVisit) throws SQLException {
         try {
             connect();
             String sql = String.format("INSERT INTO %s (name, password, registration_date, time_last_visit) " +
-                    "VALUES ('%d', '%d', '%d', '%d');", tableName, name, password, timeWhenAdd, timeLastVisit);
+                    "VALUES ('%d', '%d', '%d', '%d');",
+                    tableName,
+                    name,
+                    password,
+                    timeWhenAdd,
+                    timeLastVisit
+            );
             statement.execute(sql);
         } catch (ClassNotFoundException e) {
             ConsoleHelper.writeMessage("Ошибка при добавлении данных");
@@ -45,8 +51,24 @@ public class DBManager {
         }
     }
 
+    public static synchronized void updateUserTimeLastVisit(int name) throws SQLException {
+//        String sql = String.format("UPDATE %s SET time_last_visit = %d WHERE name = %d;",
+        String sql = ("UPDATE users SET time_last_visit = '3' WHERE name = '50';"
+//                tableName,
+//                System.currentTimeMillis(),
+//                name
+        );
+        int count = statement.executeUpdate(sql);
+
+        if (count > 0){                                                             //TODO delete this
+            ConsoleHelper.writeMessage("Данные обновлены");                         //TODO delete this
+        } else {                                                                    //TODO delete this
+            ConsoleHelper.writeMessage("К сожалению, обновления не произошло!");    //TODO delete this
+        }                                                                           //TODO delete this
+    }
+
     /** Return User, by name and password */
-    public static User returnUserFromDBbyNameAndPass(int name, int password) throws SQLException, NoSuchUserException {
+    public static synchronized User returnUserFromDBbyNameAndPass(int name, int password) throws SQLException, NoSuchUserException {
         User user = null;
         try {
             connect();
