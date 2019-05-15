@@ -164,11 +164,11 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
-                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
-                    int name = Integer.parseInt(messageFromClient.getText());
-                    deleteUserFromMap(Server.connectionUsersMap, name);
-                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
-                }
+//                if (messageFromClient.getType().equals(MessageType.DISCONNECTION)){
+//                    int name = Integer.parseInt(messageFromClient.getText());
+//                    deleteUserFromMap(Server.connectionUsersMap, name);
+//                    ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
+//                }
 
             }
         } finally {
@@ -180,6 +180,14 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
+    }
+
+    /** act, when user disconnection not normal */
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        deleteUserFromMap(Server.connectionUsersMap, user.getName());
+        ConsoleHelper.writeMessage(String.format("Клиент %s отключился.", user.getName()));
+        ConsoleHelper.writeMessage(Server.connectionUsersMap.toString()); //TODO Delete this
     }
 
     private boolean isContain(Map<Integer, Long> map, Integer name) {
