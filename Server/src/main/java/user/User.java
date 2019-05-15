@@ -60,7 +60,7 @@ public class User {
 
     @Override
     public String toString() {
-        String pattern = "yyyy.MM.dd HH:mm:ss";
+        String pattern = "dd.MM.yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String registration_date = simpleDateFormat.format(this.registration_date);
         String time_last_visit = simpleDateFormat.format(this.time_last_visit);

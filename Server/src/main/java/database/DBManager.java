@@ -51,20 +51,27 @@ public class DBManager {
         }
     }
 
-    public static synchronized void updateUserTimeLastVisit(int name) throws SQLException {
-//        String sql = String.format("UPDATE %s SET time_last_visit = %d WHERE name = %d;",
-        String sql = ("UPDATE users SET time_last_visit = '3' WHERE name = '50';"
-//                tableName,
-//                System.currentTimeMillis(),
-//                name
-        );
-        int count = statement.executeUpdate(sql);
+    /** Update time user last visit server*/
+    public static synchronized void updateUserTimeLastVisit(int name) throws SQLException, ClassNotFoundException {
+        try {
+            connect();
+            String sql = String.format("UPDATE %s SET time_last_visit = %d WHERE name = %d;",
+                    tableName,
+                    System.currentTimeMillis(),
+                    name
+            );
+            int count = statement.executeUpdate(sql);
 
-        if (count > 0){                                                             //TODO delete this
-            ConsoleHelper.writeMessage("Данные обновлены");                         //TODO delete this
-        } else {                                                                    //TODO delete this
-            ConsoleHelper.writeMessage("К сожалению, обновления не произошло!");    //TODO delete this
-        }                                                                           //TODO delete this
+            if (count > 0){                                                             //TODO delete this
+                ConsoleHelper.writeMessage("Данные обновлены");                         //TODO delete this
+            } else {                                                                    //TODO delete this
+                ConsoleHelper.writeMessage("К сожалению, обновления не произошло!");    //TODO delete this
+            }                                                                           //TODO delete this
+        } catch (ClassNotFoundException e) {
+            ConsoleHelper.writeMessage("Ошибка при обновлении данных");
+        } finally {
+            disconnect();
+        }
     }
 
     /** Return User, by name and password */
