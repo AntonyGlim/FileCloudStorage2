@@ -27,7 +27,7 @@ public class Client {
                 ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
                 try {
 //                    int i = ConsoleHelper.readInt();
-                    int i = 2;
+                    int i = 2;                              //TODO delete this
                     if (i == 1) registration();
                     else if (i == 2) authorization();
                     else throw new InvalidInputFormatException();
@@ -84,17 +84,18 @@ public class Client {
      * @throws ArrayIndexOutOfBoundsException
      */
     public static ClientOperation askOperation() throws IOException, InvalidInputFormatException, ArrayIndexOutOfBoundsException {
-        ConsoleHelper.writeMessage("");
-        ConsoleHelper.writeMessage("Выберите операцию:");
-        ConsoleHelper.writeMessage(String.format("\t %d - добавить файл в список файлов для отправки", ClientOperation.ADD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - удалить файл из списка файлов для отправки", ClientOperation.REMOVE.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - загрузить файл с сервера", ClientOperation.DOWNLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - список файлов на сервере", ClientOperation.FILELIST.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - удалить файл на сервере", ClientOperation.DELETEFILEFROMSERVER.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
+        ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
+        ConsoleHelper.writeMessage(              "| Выберите операцию:                                 |");
+        ConsoleHelper.writeMessage(String.format("|\t %d - добавить файл в список файлов для отправки  |", ClientOperation.ADD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл из списка файлов для отправки  |", ClientOperation.REMOVE.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - просмотреть список файлов для отправки      |", ClientOperation.CONTENT.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - обновить список файлов для отправки         |", ClientOperation.REFRESH.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - отправить файл на сервер                    |", ClientOperation.UPLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - загрузить файл с сервера                    |", ClientOperation.DOWNLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - список файлов на сервере                    |", ClientOperation.FILELIST.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл на сервере                     |", ClientOperation.DELETEFILEFROMSERVER.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - выход                                       |", ClientOperation.EXIT.ordinal()));
+        ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
 
