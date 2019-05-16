@@ -23,8 +23,6 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
     private volatile boolean clientConnected = false;
     private User user;
-//    private DBManager dbManager = new DBManager();
-//    private String bigFileName = "";
 
     /**
      * The method is executed once,
@@ -41,6 +39,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
         try {
             if (msg == null) return;
 
+            //REGISTRATION
             if (msg instanceof Message) {
                 Message messageFromClient = (Message) msg;
 
@@ -61,6 +60,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
+                //AUTHORIZATION
                 if (messageFromClient.getType().equals(MessageType.AUTHORIZATION) && !clientConnected){
                     String[] tokens = messageFromClient.getText().split(" ");
                     String name = tokens[0];
@@ -82,6 +82,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
+                //UPLOAD_FILE (means for client)
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_FILE)){
                     String absolutePathName = user.getFolderName();
                     Path path = Paths.get(absolutePathName);
@@ -92,6 +93,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, String.format("Файл %s передан успешно.", messageFromClient.getFile().getAbsolutePath())));
                 }
 
+                //UPLOAD_BIG_FILE (means for client)
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
                     String absolutePathName = user.getFolderName();
                     Path path = Paths.get(absolutePathName);
@@ -104,6 +106,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, String.format("Файл %s передан успешно.",messageFromClient.getText())));
                 }
 
+                //DOWNLOAD_FILE (means for client)
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
                     String absolutePathName = user.getFolderName();
                     Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
@@ -143,10 +146,12 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
+                //FILE_LIST - send to client
                 if (messageFromClient.getType().equals(MessageType.FILE_LIST)){
                     ctx.writeAndFlush(new Message(MessageType.FILE_LIST_OK, user.getFileList()));
                 }
 
+                //DELETE_FILE_FROM_SERVER
                 if (messageFromClient.getType().equals(MessageType.DELETE_FILE_FROM_SERVER)){
                     String fileToDeleteName = messageFromClient.getText();
                     if (user.getFileList() != null){
@@ -162,6 +167,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         ctx.writeAndFlush(new Message(MessageType.DELETE_FILE_FROM_SERVER, "Файл не найден"));
                     }
                 }
+
             }
         } finally {
             ReferenceCountUtil.release(msg);
