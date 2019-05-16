@@ -6,9 +6,8 @@ import common.Message;
 import common.MessageType;
 import common.exception.PathIsNotFoundException;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,12 +15,14 @@ import java.nio.file.Paths;
 public class CommandUPLOAD implements Command {
     @Override
     public void execute() throws Exception {
+        ConsoleHelper.writeMessage("Отправка файла на сервер.");
+        ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
+        Path sourcePath = Paths.get(ConsoleHelper.readString());
+        sendFile(sourcePath);
+    }
+
+    public static void sendFile(Path sourcePath) throws ClassNotFoundException {
         try {
-            ConsoleHelper.writeMessage("Отправка файла на сервер.");
-
-            ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
-
-            Path sourcePath = Paths.get(ConsoleHelper.readString());
             if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
             if (sourcePath.toFile().length() <= 1024 * 1024 * 100){
                 ConnectionManager.getConnectionManager(null).send(new Message(MessageType.UPLOAD_FILE, sourcePath.toFile()));
@@ -53,12 +54,11 @@ public class CommandUPLOAD implements Command {
                     i++;
                 }
                 fileInputStream.close();
-                ConnectionManager.getConnectionManager(null).send(new Message(MessageType.UPLOAD_BIG_FILE_END));
+                ConnectionManager.getConnectionManager(null).send(new Message(MessageType.UPLOAD_BIG_FILE_END, sourcePath.toString()));
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             }
-
-        } catch (PathIsNotFoundException e) {
-            ConsoleHelper.writeMessage("Файл не был найден.");
+        } catch (PathIsNotFoundException | IOException e) {
+            ConsoleHelper.writeMessage(String.format("Файл %s не был найден.", sourcePath));
         }
     }
 }

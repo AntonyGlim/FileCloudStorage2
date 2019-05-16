@@ -84,6 +84,7 @@ public class Client {
      * @throws ArrayIndexOutOfBoundsException
      */
     public static ClientOperation askOperation() throws IOException, InvalidInputFormatException, ArrayIndexOutOfBoundsException {
+        ConsoleHelper.writeMessage(              "");
         ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
         ConsoleHelper.writeMessage(              "| Выберите операцию:                                 |");
         ConsoleHelper.writeMessage(String.format("|\t %d - добавить файл в список файлов для отправки  |", ClientOperation.ADD.ordinal()));
@@ -91,6 +92,7 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("|\t %d - просмотреть список файлов для отправки      |", ClientOperation.CONTENT.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - обновить список файлов для отправки         |", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - отправить файл на сервер                    |", ClientOperation.UPLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - отправить все файлы из списка на сервер     |", ClientOperation.UPLOADALL.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - загрузить файл с сервера                    |", ClientOperation.DOWNLOAD.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - список файлов на сервере                    |", ClientOperation.FILELIST.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл на сервере                     |", ClientOperation.DELETEFILEFROMSERVER.ordinal()));

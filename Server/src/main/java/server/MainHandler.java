@@ -89,7 +89,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName());
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
-                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
+                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, String.format("Файл %s передан успешно.", messageFromClient.getFile().getAbsolutePath())));
                 }
 
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
@@ -101,7 +101,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     fileOutputStream.close();
                 }
                 if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE_END)){
-                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, "Файл передан успешно."));
+                    ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, String.format("Файл %s передан успешно.",messageFromClient.getText())));
                 }
 
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
