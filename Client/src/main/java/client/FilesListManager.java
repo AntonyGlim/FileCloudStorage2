@@ -91,7 +91,7 @@ public class FilesListManager {
 
     public boolean filesListContainsPath(Path sourcePath){
         for (FileProperties file : filesList) {
-            if (file.getAbsolutePath().equals(sourcePath)){
+            if (file.getAbsolutePath().equals(sourcePath.toString())){
                 return true;
             }
         }
