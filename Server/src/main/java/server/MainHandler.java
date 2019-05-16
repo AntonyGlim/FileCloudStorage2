@@ -98,6 +98,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     String absolutePathName = user.getFolderName();
                     Path path = Paths.get(absolutePathName);
                     if (!Files.exists(path)) Files.createDirectories(path);
+                    Path pathToFile = Paths.get(absolutePathName + messageFromClient.getFile().getName());
+                    if (messageFromClient.getText().equals("0") && Files.exists(pathToFile)){
+                        Files.delete(pathToFile);
+                    }
                     fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName(), true);
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
