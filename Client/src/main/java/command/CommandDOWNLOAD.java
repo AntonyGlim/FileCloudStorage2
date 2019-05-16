@@ -4,7 +4,6 @@ import client.ConnectionManager;
 import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
-import common.exception.PathIsNotFoundException;
 
 import java.io.FileOutputStream;
 import java.nio.file.Files;

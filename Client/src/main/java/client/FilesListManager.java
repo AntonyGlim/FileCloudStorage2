@@ -62,7 +62,7 @@ public class FilesListManager {
      */
     public void removeFile(Path sourcePath){
         for (int i = 0; i < filesList.size(); i++) {
-            if (filesList.get(i).getAbsolutePath().equals(sourcePath)){
+            if (filesList.get(i).getAbsolutePath().equals(sourcePath.toString())){
                 ConsoleHelper.writeMessage(String.format("Файл %s удален.", filesList.get(i).getAbsolutePath()));
                 filesList.remove(i);
                 return;
