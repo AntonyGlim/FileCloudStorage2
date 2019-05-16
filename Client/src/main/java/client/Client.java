@@ -4,9 +4,11 @@ import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
 import common.exception.InvalidInputFormatException;
+import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class Client {
 
@@ -31,6 +33,10 @@ public class Client {
                     else throw new InvalidInputFormatException();
                 } catch (InvalidInputFormatException e){
                     ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                } catch (PathIsNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (IOException e) {
@@ -119,13 +125,14 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static void authorization() throws IOException, ClassNotFoundException {
+    private static void authorization() throws IOException, ClassNotFoundException, PathIsNotFoundException, SQLException {
         int clientName = getUserName().hashCode();
         int clientPassword = getUserPassword().hashCode();
         connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.AUTHORIZATION_OK) {
             clientConnected = true;
+            DBManager.returnFilesListFromDB();
             Client.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
