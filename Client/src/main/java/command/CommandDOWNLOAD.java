@@ -36,12 +36,12 @@ public class CommandDOWNLOAD implements Command {
                 fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName());
                 fileOutputStream.write(message.getBytes());
                 fileOutputStream.close();
-                ConsoleHelper.writeMessage("Файл успешно загружен.");
+                ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
             }
             if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
                 while (true){
                     if (fileOutputStream == null)
-                        fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName() /*+ "_part" + part++*/, true);
+                        fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
                     fileOutputStream.write(message.getBytes());
                     ConsoleHelper.writeMessage(message.getText());
                     message = ConnectionManager.getConnectionManager(null).receive();
@@ -51,7 +51,7 @@ public class CommandDOWNLOAD implements Command {
                     }
                 }
                 fileOutputStream.close();
-                ConsoleHelper.writeMessage("Файл успешно загружен.");
+                ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
             }
         }
 
