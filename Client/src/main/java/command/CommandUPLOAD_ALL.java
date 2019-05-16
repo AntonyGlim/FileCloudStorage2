@@ -6,7 +6,7 @@ import common.FileProperties;
 
 import java.nio.file.Paths;
 
-public class CommandUPLOADALL implements Command  {
+public class CommandUPLOAD_ALL implements Command  {
     @Override
     public void execute() throws Exception {
         ConsoleHelper.writeMessage("Отправка файлов на сервер.");

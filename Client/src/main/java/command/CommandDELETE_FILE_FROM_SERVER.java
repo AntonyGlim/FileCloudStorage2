@@ -5,7 +5,7 @@ import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
 
-public class CommandDELETEFILEFROMSERVER implements Command {
+public class CommandDELETE_FILE_FROM_SERVER implements Command {
     @Override
     public void execute() throws Exception {
         ConsoleHelper.writeMessage("Удаление файла с сервера.");

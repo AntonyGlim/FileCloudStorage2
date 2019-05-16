@@ -14,10 +14,10 @@ public class CommandExecutor {
         allKnownCommandsMap.put(ClientOperation.CONTENT, new CommandCONTENT());
         allKnownCommandsMap.put(ClientOperation.REFRESH, new CommandREFRESH());
         allKnownCommandsMap.put(ClientOperation.UPLOAD, new CommandUPLOAD());
-        allKnownCommandsMap.put(ClientOperation.UPLOADALL, new CommandUPLOADALL());
+        allKnownCommandsMap.put(ClientOperation.UPLOAD_ALL, new CommandUPLOAD_ALL());
         allKnownCommandsMap.put(ClientOperation.DOWNLOAD, new CommandDOWNLOAD());
-        allKnownCommandsMap.put(ClientOperation.FILELIST, new CommandFILELIST());
-        allKnownCommandsMap.put(ClientOperation.DELETEFILEFROMSERVER, new CommandDELETEFILEFROMSERVER());
+        allKnownCommandsMap.put(ClientOperation.FILE_LIST, new CommandFILE_LIST());
+        allKnownCommandsMap.put(ClientOperation.DELETE_FILE_FROM_SERVER, new CommandDELETE_FILE_FROM_SERVER());
         allKnownCommandsMap.put(ClientOperation.EXIT, new CommandEXIT());
     }
 

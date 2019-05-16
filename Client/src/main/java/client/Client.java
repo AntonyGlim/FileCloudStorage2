@@ -92,10 +92,10 @@ public class Client {
         ConsoleHelper.writeMessage(String.format("|\t %d - просмотреть список файлов для отправки      |", ClientOperation.CONTENT.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - обновить список файлов для отправки         |", ClientOperation.REFRESH.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - отправить файл на сервер                    |", ClientOperation.UPLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("|\t %d - отправить все файлы из списка на сервер     |", ClientOperation.UPLOADALL.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - отправить все файлы из списка на сервер     |", ClientOperation.UPLOAD_ALL.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - загрузить файл с сервера                    |", ClientOperation.DOWNLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("|\t %d - список файлов на сервере                    |", ClientOperation.FILELIST.ordinal()));
-        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл на сервере                     |", ClientOperation.DELETEFILEFROMSERVER.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - список файлов на сервере                    |", ClientOperation.FILE_LIST.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл на сервере                     |", ClientOperation.DELETE_FILE_FROM_SERVER.ordinal()));
         ConsoleHelper.writeMessage(String.format("|\t %d - выход                                       |", ClientOperation.EXIT.ordinal()));
         ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
         return ClientOperation.values()[ConsoleHelper.readInt()];

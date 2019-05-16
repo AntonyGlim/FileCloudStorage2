@@ -8,7 +8,7 @@ import common.MessageType;
 
 import java.util.ArrayList;
 
-public class CommandFILELIST implements Command  {
+public class CommandFILE_LIST implements Command  {
     @Override
     public void execute() throws Exception {
         ConsoleHelper.writeMessage("Список файлов расположеных на сервере:");

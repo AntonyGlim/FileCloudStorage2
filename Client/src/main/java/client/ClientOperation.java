@@ -6,9 +6,9 @@ public enum  ClientOperation {
     CONTENT,
     REFRESH,
     UPLOAD,
-    UPLOADALL,
+    UPLOAD_ALL,
     DOWNLOAD,
-    FILELIST,
-    DELETEFILEFROMSERVER,
+    FILE_LIST,
+    DELETE_FILE_FROM_SERVER,
     EXIT
 }
