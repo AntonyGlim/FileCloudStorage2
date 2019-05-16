@@ -177,8 +177,8 @@ public class Client {
 
     protected static String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
-        String userName = ConsoleHelper.readString();
-//        String userName = "2";                                 //TODO delete this
+//        String userName = ConsoleHelper.readString();
+        String userName = "2";                                 //TODO delete this
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
@@ -186,8 +186,8 @@ public class Client {
 
     protected static String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
-        String userPassword = ConsoleHelper.readString();
-//        String userPassword = "2";                        //TODO delete this
+//        String userPassword = ConsoleHelper.readString();
+        String userPassword = "2";                        //TODO delete this
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }

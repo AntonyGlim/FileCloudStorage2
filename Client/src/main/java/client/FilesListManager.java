@@ -89,6 +89,7 @@ public class FilesListManager {
         return filesList;
     }
 
+    /** If list contains such absolute path*/
     public boolean filesListContainsPath(Path sourcePath){
         for (FileProperties file : filesList) {
             if (file.getAbsolutePath().equals(sourcePath.toString())){

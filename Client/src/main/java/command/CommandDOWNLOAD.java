@@ -11,12 +11,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CommandDOWNLOAD implements Command {
+
     @Override
     public void execute() throws Exception {
         ConsoleHelper.writeMessage("Загрузка файла с сервера.");
 
         ConsoleHelper.writeMessage("Введите имя файла для загрузки:");
-        ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DOWNLOAD_FILE, ConsoleHelper.readString()));
+        downloadFile(ConsoleHelper.readString());
+
+    }
+
+
+    public static void downloadFile(String fileName) throws Exception {
+        ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DOWNLOAD_FILE, fileName));
 
         Message message = ConnectionManager.getConnectionManager(null).receive();
         FileOutputStream fileOutputStream = null;
