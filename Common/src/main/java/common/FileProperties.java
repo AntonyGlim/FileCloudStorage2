@@ -94,9 +94,7 @@ public class FileProperties implements Serializable {
         builder.append("absolute path: ");
         builder.append(changeStringLength(absolutePath, 32));
         builder.append(", when added: ");
-        String pattern = "yyyy.MM.dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(timeWhenAdd);
+        String date = Constants.simpleDateFormat.format(timeWhenAdd);
         builder.append(changeStringLength(date, 20));
         builder.append(" file exist: ");
         builder.append(isFileExist());

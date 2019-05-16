@@ -2,9 +2,9 @@ package user;
 
 import common.ConsoleHelper;
 import common.FileProperties;
+import common.Constants;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -60,14 +60,10 @@ public class User {
 
     @Override
     public String toString() {
-        String pattern = "dd.MM.yyyy HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String registration_date = simpleDateFormat.format(this.registration_date);
-        String time_last_visit = simpleDateFormat.format(this.time_last_visit);
         return (
                 "Client name: " + this.name +
-                ", registration date: " + registration_date +
-                ", time last visit: " + time_last_visit
+                ", registration date: " + Constants.simpleDateFormat.format(this.registration_date) +
+                ", time last visit: " + Constants.simpleDateFormat.format(this.time_last_visit)
         );
     }
 }
