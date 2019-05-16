@@ -29,7 +29,7 @@ public class CommandUPLOAD implements Command {
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             } else {
                 FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
-                int bufferLength = 1024 * 1024 * 4; //4 mb
+                int bufferLength = 1024 * 1; //1 kb if size will be bigger file will came with defects
                 byte[] buffer = new byte[bufferLength];
                 int i = 0;
                 while (fileInputStream.available() > 0) {
