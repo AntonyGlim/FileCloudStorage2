@@ -40,10 +40,15 @@ public class CommandDOWNLOAD implements Command {
             }
             if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
                 while (true){
-                    if (fileOutputStream == null)
+                    Path pathToFile = Paths.get(absolutePathName + message.getFile().getName());
+                    if (message.getText().equals("0") && Files.exists(pathToFile)){
+                        Files.delete(pathToFile);
+                    }
+                    if (fileOutputStream == null){
                         fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
+                    }
                     fileOutputStream.write(message.getBytes());
-                    ConsoleHelper.writeMessage(message.getText());
+                    ConsoleHelper.writeMessage(message.getText()); //костыль TODO delete this
                     message = ConnectionManager.getConnectionManager(null).receive();
                     if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
                         Thread.sleep(20000);  //костыль TODO delete this
