@@ -19,6 +19,9 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * MainHandler
+ */
 public class MainHandler extends ChannelInboundHandlerAdapter {
 
     private volatile boolean clientConnected = false;

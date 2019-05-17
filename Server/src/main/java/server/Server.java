@@ -1,5 +1,6 @@
 package server;
 
+import common.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -15,6 +16,9 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Configuring server
+ */
 public class Server {
 
     private int port;
@@ -58,11 +62,11 @@ public class Server {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 7777;
+        int port = Constants.serverPort;
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
-
         new Server(port).run();
     }
+    
 }

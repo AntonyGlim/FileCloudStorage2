@@ -9,6 +9,7 @@ import java.sql.*;
 /**
  * Work with DB.
  * All public methods has own connect() and disconnect()
+ * In DB stored information about list of users which has registration on Server
  */
 public class DBManager {
     private static Connection connection;
