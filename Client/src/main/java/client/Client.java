@@ -7,6 +7,7 @@ import common.exception.InvalidInputFormatException;
 import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.sql.SQLException;
 
@@ -16,36 +17,34 @@ public class Client {
     private static volatile boolean clientConnected = false;
     private static ConnectionManager connectionManager;
 
-    public static int getClientName() {
-        return clientName;
-    }
 
     static {
         try {
             connect();
             while (!clientConnected){
-                ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
+                ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2).");
                 try {
-//                    int i = ConsoleHelper.readInt();
-                    int i = 2;                              //TODO delete this
+                    int i = ConsoleHelper.readInt();
+//                    int i = 2; //TODO delete this
                     if (i == 1) registration();
                     else if (i == 2) authorization();
                     else throw new InvalidInputFormatException();
                 } catch (InvalidInputFormatException e){
-                    ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                    ConsoleHelper.writeError("Пожалуйста, выберите из предложенного списка.");
                 } catch (PathIsNotFoundException e) {
-                    e.printStackTrace();
+                    ConsoleHelper.writeError("База данных повреждена, или отсутствует.");
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    ConsoleHelper.writeError("Не удалось подключиться к базе данных.");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            ConsoleHelper.writeError("Не удалось подключиться. Сервер не доступен.");
+        } catch (InvalidInputFormatException e){
+            ConsoleHelper.writeError("Проверьте адрес сервера и адрес порта.");
         }
 
     }
+
 
     public static void main(String[] args) throws Exception {
         //main loop block
@@ -56,7 +55,7 @@ public class Client {
                     operation = askOperation();
                     CommandExecutor.execute(operation);
                 } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e) {
-                    ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                    ConsoleHelper.writeError("Пожалуйста, выберите из предложенного списка");
                 }
             } while (operation != ClientOperation.EXIT);
         }
@@ -138,7 +137,7 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static void connect() throws IOException, ClassNotFoundException {
+    private static void connect() throws IOException, ConnectException, InvalidInputFormatException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
         connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
@@ -147,17 +146,17 @@ public class Client {
 
     protected static String getServerAddress() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес сервера");
-//        String address = ConsoleHelper.readString();
-        String address = "localhost";                               //TODO delete this
+        String address = ConsoleHelper.readString();
+//        String address = "localhost"; //TODO delete this
         ConsoleHelper.writeMessage(address);
         return address;
     }
 
 
-    protected static int getServerPort() throws IOException {
+    protected static int getServerPort() throws IOException, InvalidInputFormatException {
         ConsoleHelper.writeMessage("Введите адрес порта");
-//        int port = ConsoleHelper.readInt();
-        int port = 7777;                                            //TODO delete this
+        int port = ConsoleHelper.readInt();
+//        int port = 7777; //TODO delete this
         ConsoleHelper.writeMessage(Integer.toString(port));
         return port;
     }
@@ -165,8 +164,8 @@ public class Client {
 
     protected static String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
-//        String userName = ConsoleHelper.readString();
-        String userName = "2";                                 //TODO delete this
+        String userName = ConsoleHelper.readString();
+//        String userName = "2"; //TODO delete this
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
@@ -174,8 +173,8 @@ public class Client {
 
     protected static String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
-//        String userPassword = ConsoleHelper.readString();
-        String userPassword = "2";                        //TODO delete this
+        String userPassword = ConsoleHelper.readString();
+//        String userPassword = "2"; //TODO delete this
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }
