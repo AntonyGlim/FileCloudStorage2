@@ -48,31 +48,18 @@ public class Client {
     }
 
     public static void main(String[] args) throws Exception {
-        //authorization block
-//        Client client = new Client();
-//        client.connect();
-//        while (!client.clientConnected){
-//            ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
-//            try {
-//                int i = ConsoleHelper.readInt();
-//                if (i == 1) client.registration();
-//                else if (i == 2) client.authorization();
-//                else throw new InvalidInputFormatException();
-//            } catch (InvalidInputFormatException e){
-//                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
-//            }
-//        }
-
         //main loop block
-        ClientOperation operation = null;
-        do {
-            try {
-                operation = askOperation();
-                CommandExecutor.execute(operation);
-            } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e){
-                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
-            }
-        } while (operation != ClientOperation.EXIT);
+        if (clientConnected) {
+            ClientOperation operation = null;
+            do {
+                try {
+                    operation = askOperation();
+                    CommandExecutor.execute(operation);
+                } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e) {
+                    ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                }
+            } while (operation != ClientOperation.EXIT);
+        }
     }
 
 
