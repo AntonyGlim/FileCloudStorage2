@@ -117,6 +117,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     else if (sourcePath.toFile().length() <= 1024 * 1024 * 100){
                         ctx.writeAndFlush(new Message(MessageType.DOWNLOAD_FILE_OK, sourcePath.toFile()));
                     } else {
+                        ctx.writeAndFlush(new Message(
+                                MessageType.DOWNLOAD_BIG_FILE_START,
+                                sourcePath.toFile().getName()
+                        ));
                         FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
                         int bufferLength = 1024 * 512; //512 kb
                         byte[] buffer = new byte[bufferLength];
@@ -134,7 +138,9 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                                 Thread.sleep(10); //TODO delete this
                             } else {
                                 byte[] buffer2 = new byte[count];
-                                fileInputStream.read(buffer2);
+                                for (int j = 0; j < count; j++) {
+                                    buffer2[j] = buffer[j];
+                                }
                                 ctx.writeAndFlush(new Message(
                                         MessageType.DOWNLOAD_BIG_FILE,
                                         sourcePath.toFile(),

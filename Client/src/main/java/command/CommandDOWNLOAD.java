@@ -28,36 +28,38 @@ public class CommandDOWNLOAD implements Command {
         Message message = ConnectionManager.getConnectionManager(null).receive();
         FileOutputStream fileOutputStream = null;
 
-        if (message.getType() == MessageType.DOWNLOAD_FILE_OK || message.getType() == MessageType.DOWNLOAD_BIG_FILE){
+        if (message.getType() == MessageType.DOWNLOAD_FILE_OK){
             String absolutePathName = "Client/client_storage/";
             Path path = Paths.get(absolutePathName);
             if (!Files.exists(path)) Files.createDirectories(path);
-            if (message.getType() == MessageType.DOWNLOAD_FILE_OK){
-                fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName());
-                fileOutputStream.write(message.getBytes());
-                fileOutputStream.close();
-                ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
-            }
-            if (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
-                while (true){
-                    Path pathToFile = Paths.get(absolutePathName + message.getFile().getName());
-                    if (message.getText().equals("0") && Files.exists(pathToFile)){
-                        Files.delete(pathToFile);
-                    }
-                    if (fileOutputStream == null){
-                        fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
-                    }
-                    fileOutputStream.write(message.getBytes());
-                    ConsoleHelper.writeMessage(message.getText()); //костыль TODO delete this
-                    message = ConnectionManager.getConnectionManager(null).receive();
-                    if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
-                        Thread.sleep(20000);  //костыль TODO delete this
-                        break;
-                    }
+            fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName());
+            fileOutputStream.write(message.getBytes());
+            fileOutputStream.close();
+            ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
+        }
+
+        if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_START){
+            String absolutePathName = "Client/client_storage/";
+            Path path = Paths.get(absolutePathName);
+            if (!Files.exists(path)) Files.createDirectories(path);
+            Path pathToFile = Paths.get(absolutePathName + message.getText());
+            if (Files.exists(pathToFile)) Files.delete(pathToFile);
+            message = ConnectionManager.getConnectionManager(null).receive();
+            while (message.getType() == MessageType.DOWNLOAD_BIG_FILE){
+                if (fileOutputStream == null){
+                    fileOutputStream = new FileOutputStream(absolutePathName + message.getFile().getName(), true);
                 }
-                fileOutputStream.close();
-                ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
+                fileOutputStream.write(message.getBytes());
+                ConsoleHelper.writeMessage(message.getText()); //костыль TODO delete this
+                message = ConnectionManager.getConnectionManager(null).receive();
             }
+            if (message.getType() == MessageType.DOWNLOAD_BIG_FILE_END){
+//                Thread.sleep(20000);  //костыль TODO delete this
+                ConsoleHelper.writeMessage(String.format("Файл %s успешно загружен.", fileName));
+            } else {
+                ConsoleHelper.writeMessage(String.format("Ошибка! Файл %s загружен не корректно.", fileName));
+            }
+            fileOutputStream.close();
         }
 
         if (message.getType() == MessageType.DOWNLOAD_FILE){
