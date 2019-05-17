@@ -109,7 +109,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(new Message(MessageType.UPLOAD_FILE_OK, String.format("Файл %s передан успешно.",messageFromClient.getText())));
                 }
 
-                //DOWNLOAD_FILE (means for client)
+                //TODO DOWNLOAD_FILE (means for client) - not working correctly with big files
                 if (messageFromClient.getType().equals(MessageType.DOWNLOAD_FILE)){
                     String absolutePathName = user.getFolderName();
                     Path sourcePath = Paths.get(absolutePathName + messageFromClient.getText());
@@ -135,7 +135,6 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                                         Integer.toString(i),
                                         buffer
                                 ));
-                                Thread.sleep(10); //TODO delete this
                             } else {
                                 byte[] buffer2 = new byte[count];
                                 for (int j = 0; j < count; j++) {
@@ -147,6 +146,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                                         Integer.toString(i),
                                         buffer2
                                 ));
+                                ctx.flush();
                             }
                             i++;
                         }

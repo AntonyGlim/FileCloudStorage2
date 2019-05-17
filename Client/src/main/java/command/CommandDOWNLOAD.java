@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+//TODO - not working correctly with big files
 public class CommandDOWNLOAD implements Command {
 
     @Override
@@ -20,7 +21,6 @@ public class CommandDOWNLOAD implements Command {
         downloadFile(ConsoleHelper.readString());
 
     }
-
 
     public static void downloadFile(String fileName) throws Exception {
         ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DOWNLOAD_FILE, fileName));
