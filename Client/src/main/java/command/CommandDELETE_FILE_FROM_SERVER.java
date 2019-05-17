@@ -5,6 +5,9 @@ import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
 
+/**
+ * Delete file from server by file name
+ */
 public class CommandDELETE_FILE_FROM_SERVER implements Command {
     @Override
     public void execute() throws Exception {

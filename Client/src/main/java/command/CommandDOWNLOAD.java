@@ -11,6 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 //TODO - not working correctly with big files
+
+/**
+ * Download one file from server by name
+ */
 public class CommandDOWNLOAD implements Command {
 
     @Override
@@ -19,8 +23,8 @@ public class CommandDOWNLOAD implements Command {
 
         ConsoleHelper.writeMessage("Введите имя файла для загрузки:");
         downloadFile(ConsoleHelper.readString());
-
     }
+
 
     public static void downloadFile(String fileName) throws Exception {
         ConnectionManager.getConnectionManager(null).send(new Message(MessageType.DOWNLOAD_FILE, fileName));

@@ -3,6 +3,9 @@ package command;
 import common.ConsoleHelper;
 import common.FileProperties;
 
+/**
+ * Download all files (which lays on client folder) from server
+ */
 public class CommandDOWNLOAD_ALL implements Command {
     @Override
     public void execute() throws Exception {

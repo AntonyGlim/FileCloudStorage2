@@ -3,6 +3,9 @@ package command;
 import client.FilesListManager;
 import common.ConsoleHelper;
 
+/**
+ * Refresh all files from list of files names which is on the user side
+ */
 public class CommandREFRESH implements Command {
     @Override
     public void execute() throws Exception {

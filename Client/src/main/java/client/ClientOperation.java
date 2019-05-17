@@ -1,5 +1,8 @@
 package client;
 
+/**
+ * All known client operations
+ */
 public enum  ClientOperation {
     ADD,
     REMOVE,

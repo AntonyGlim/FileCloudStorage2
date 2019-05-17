@@ -7,6 +7,9 @@ import common.exception.PathIsNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Delete file name from list of files names which is on the user side
+ */
 public class CommandREMOVE implements Command {
     public void execute() throws Exception {
         try {
@@ -20,7 +23,7 @@ public class CommandREMOVE implements Command {
             filesListManager.removeFile(sourcePath);
 
         } catch (PathIsNotFoundException e) {
-            ConsoleHelper.writeMessage("Файл не был найден.");
+            ConsoleHelper.writeError("Файл не был найден.");
         }
     }
 }

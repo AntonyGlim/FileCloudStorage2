@@ -11,6 +11,9 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.sql.SQLException;
 
+/**
+ * Main class with main loop
+ */
 public class Client {
 
     private static int clientName;

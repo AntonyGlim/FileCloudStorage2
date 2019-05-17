@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Upload one file to the server
+ */
 public class CommandUPLOAD implements Command {
     @Override
     public void execute() throws Exception {
@@ -64,7 +67,7 @@ public class CommandUPLOAD implements Command {
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             }
         } catch (PathIsNotFoundException | IOException e) {
-            ConsoleHelper.writeMessage(String.format("Файл %s не был найден.", sourcePath));
+            ConsoleHelper.writeError(String.format("Файл %s не был найден.", sourcePath));
         }
     }
 }

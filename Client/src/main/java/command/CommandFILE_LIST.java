@@ -8,6 +8,9 @@ import common.MessageType;
 
 import java.util.ArrayList;
 
+/**
+ * Ask server about list of files names which is on the server side
+ */
 public class CommandFILE_LIST implements Command  {
 
     @Override

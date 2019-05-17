@@ -5,6 +5,9 @@ import client.FilesListManager;
 import common.ConsoleHelper;
 import common.exception.PathIsNotFoundException;
 
+/**
+ * Print list of files names which is on the user side
+ */
 public class CommandCONTENT implements Command {
     public void execute() throws Exception {
         try {
@@ -17,7 +20,7 @@ public class CommandCONTENT implements Command {
             }
 
         } catch (PathIsNotFoundException e) {
-            ConsoleHelper.writeMessage("Файл не был найден.");
+            ConsoleHelper.writeError("Файл не был найден.");
         }
     }
 }

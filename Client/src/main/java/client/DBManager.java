@@ -10,7 +10,7 @@ import java.util.Date;
 import static client.FilesListManager.getFilesListManager;
 
 /**
- * Класс будет отвечать за работу с базой данных
+ * Work with DB
  */
 public class DBManager {
     private static Connection connection;

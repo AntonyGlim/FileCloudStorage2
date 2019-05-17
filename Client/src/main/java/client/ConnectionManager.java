@@ -1,13 +1,10 @@
 package client;
 
-import common.ConsoleHelper;
 import common.Message;
-import common.MessageType;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;

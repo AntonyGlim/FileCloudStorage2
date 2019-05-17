@@ -6,6 +6,9 @@ import common.FileProperties;
 
 import java.nio.file.Paths;
 
+/**
+ * Upload all files from list of files names which is on the user side
+ */
 public class CommandUPLOAD_ALL implements Command  {
     @Override
     public void execute() throws Exception {

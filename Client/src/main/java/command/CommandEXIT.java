@@ -13,6 +13,8 @@ import static client.DBManager.insertIntoTable;
 
 /**
  * The command is executed at the end of the program.
+ * All user information about list of files names which is on the user side
+ * will be save into DB
  */
 public class CommandEXIT implements Command {
 
@@ -32,7 +34,7 @@ public class CommandEXIT implements Command {
                 ConsoleHelper.writeMessage("Список файлов сохранен.");
             }
         } catch (PathIsNotFoundException e) {
-            ConsoleHelper.writeMessage("Файл не был найден.");
+            ConsoleHelper.writeError("Файл не был найден.");
         }
         ConsoleHelper.writeMessage("До встречи!");
     }

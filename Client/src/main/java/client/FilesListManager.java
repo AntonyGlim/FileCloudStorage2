@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * The class keeps a list of the files
  * that the user wants to send to the server.
+ * Singleton pattern
  */
 public class FilesListManager {
 

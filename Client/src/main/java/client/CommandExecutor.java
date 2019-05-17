@@ -5,6 +5,9 @@ import command.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * All known client operations executor
+ */
 public class CommandExecutor {
     private static final Map<ClientOperation, Command> allKnownCommandsMap = new HashMap<ClientOperation, Command>();
 
