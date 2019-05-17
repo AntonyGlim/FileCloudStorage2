@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class CommandUPLOAD implements Command {
     @Override
@@ -28,8 +29,12 @@ public class CommandUPLOAD implements Command {
                 ConnectionManager.getConnectionManager(null).send(new Message(MessageType.UPLOAD_FILE, sourcePath.toFile()));
                 ConsoleHelper.writeMessage(ConnectionManager.getConnectionManager(null).receive().getText());
             } else {
+                ConnectionManager.getConnectionManager(null).send(new Message(
+                        MessageType.UPLOAD_BIG_FILE_START,
+                        sourcePath.toFile().getName()
+                ));
                 FileInputStream fileInputStream = new FileInputStream(sourcePath.toFile());
-                int bufferLength = 1024 * 1; //1 kb if size will be bigger file will came with defects
+                int bufferLength = 1024 * 1024 * 4; //4 mb
                 byte[] buffer = new byte[bufferLength];
                 int i = 0;
                 while (fileInputStream.available() > 0) {
@@ -43,7 +48,9 @@ public class CommandUPLOAD implements Command {
                         ));
                     } else {
                         byte[] buffer2 = new byte[count];
-                        fileInputStream.read(buffer2);
+                        for (int j = 0; j < count; j++) {
+                            buffer2[j] = buffer[j];
+                        }
                         ConnectionManager.getConnectionManager(null).send(new Message(
                                 MessageType.UPLOAD_BIG_FILE,
                                 sourcePath.toFile(),

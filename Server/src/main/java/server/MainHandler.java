@@ -94,15 +94,14 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 //UPLOAD_BIG_FILE (means for client)
-                if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
-                    String absolutePathName = user.getFolderName();
-                    Path path = Paths.get(absolutePathName);
+                if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE_START)){
+                    Path path = Paths.get(user.getFolderName());
                     if (!Files.exists(path)) Files.createDirectories(path);
-                    Path pathToFile = Paths.get(absolutePathName + messageFromClient.getFile().getName());
-                    if (messageFromClient.getText().equals("0") && Files.exists(pathToFile)){
-                        Files.delete(pathToFile);
-                    }
-                    fileOutputStream = new FileOutputStream(absolutePathName + messageFromClient.getFile().getName(), true);
+                    Path pathToFile = Paths.get(user.getFolderName() + messageFromClient.getText());
+                    if (Files.exists(pathToFile)) Files.delete(pathToFile);
+                }
+                if (messageFromClient.getType().equals(MessageType.UPLOAD_BIG_FILE)){
+                    fileOutputStream = new FileOutputStream(user.getFolderName() + messageFromClient.getFile().getName(), true);
                     fileOutputStream.write(messageFromClient.getBytes());
                     fileOutputStream.close();
                 }

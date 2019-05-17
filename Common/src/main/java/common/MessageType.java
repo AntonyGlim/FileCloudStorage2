@@ -14,6 +14,7 @@ public enum MessageType {
 
     UPLOAD_FILE,
     UPLOAD_FILE_OK,
+    UPLOAD_BIG_FILE_START,
     UPLOAD_BIG_FILE,
     UPLOAD_BIG_FILE_END,
 
