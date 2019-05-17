@@ -13,6 +13,10 @@ public class ConsoleHelper {
         System.out.println(message);
     }
 
+    public static void writeError(String message) {
+        System.err.println(message);
+    }
+
     public static String readString() throws IOException {
         String text = bis.readLine();
         return text;
