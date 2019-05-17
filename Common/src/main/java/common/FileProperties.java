@@ -9,13 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * The class will store data about the object.
- * file name
- * file size
- * absolute path
- * add time
- * Is there a file on the disk at the moment?
- * TODO Delete Path - Serialization
+ * The class will store data about the file.
  */
 public class FileProperties implements Serializable {
     private String name;

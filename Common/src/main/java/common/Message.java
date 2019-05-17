@@ -4,19 +4,19 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Класс, отвечающий за пересылаемые сообщения
- * Сообщение Message - это данные, которые одна сторона отправляет, а вторая принимает.
- * Каждое сообщение должно иметь тип MessageType, а некоторые и дополнительные
- * данные, например, текстовое сообщение должно содержать текст, файловое поле должно содержать файл.
- * Т.к. сообщения будут создаваться в одной программе, а читаться в другой, удобно воспользоваться механизмом
- * сериализации для перевода класса в последовательность битов и наоборот.
+ * Class responsible for messages sent
+ * A Message is data that one party sends and the other receives.
+ * Each message must be of type MessageType, and some additional
+ * data, for example, a text message must contain text, the file field must contain a file.
+ * Since messages will be created in one program, and read in another, it is convenient to use the mechanism
+ * serialization to translate a class into a sequence of bits and vice versa.
  */
 public class Message implements Serializable {
 
-    private final MessageType type; //будет содержать тип сообщения
-    private final String text; //будет содержать текст сообщения
-    private final File file; //будет содержать файл для пересылки
-    private byte[] bytes; //собственно в массиве будет храниться тело файла
+    private final MessageType type;
+    private final String text;
+    private final File file;
+    private byte[] bytes; //the body of the file will be stored in the array
     private ArrayList<FileProperties> fileList;
 
     public Message(MessageType type) {
