@@ -20,6 +20,7 @@ public class CommandFILE_LIST implements Command  {
     }
 
     private void printList(ArrayList<FileProperties> fileList){
+        if (fileList == null) return;
         for (FileProperties file : fileList) {
             ConsoleHelper.writeMessage(file.toString());
         }
