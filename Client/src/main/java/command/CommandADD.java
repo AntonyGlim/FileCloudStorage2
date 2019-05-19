@@ -1,6 +1,6 @@
 package command;
 
-import client.FileProperties;
+import common.FileProperties;
 import client.FilesListManager;
 import common.ConsoleHelper;
 import common.exception.FileAlreadyExistException;
@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Add file into list of files names which is on the user side
+ */
 public class CommandADD implements Command {
     public void execute() throws Exception {
         try {
@@ -21,14 +24,14 @@ public class CommandADD implements Command {
 
             Path sourcePath = Paths.get(ConsoleHelper.readString());
             if (Files.notExists(sourcePath)) throw new PathIsNotFoundException();
-            filesListManager.addFile(new FileProperties(sourcePath));
+            filesListManager.addFile(new FileProperties(sourcePath.toString()));
 
             ConsoleHelper.writeMessage("Добавление файла завершено успешно.");
 
         } catch (PathIsNotFoundException e) {
-            ConsoleHelper.writeMessage("Файл не был найден.");
+            ConsoleHelper.writeError("Файл не был найден.");
         } catch (FileAlreadyExistException e){
-            ConsoleHelper.writeMessage("Файл с таким именем уже добавлен в список");
+            ConsoleHelper.writeError("Файл с таким именем уже добавлен в список");
         }
     }
 }

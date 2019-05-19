@@ -1,17 +1,20 @@
 package client;
 
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.exception.FileAlreadyExistException;
 import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The class keeps a list of the files
  * that the user wants to send to the server.
+ * Singleton pattern
  */
 public class FilesListManager {
 
@@ -37,7 +40,7 @@ public class FilesListManager {
         if(!file.isFileExist()){
             throw new PathIsNotFoundException();
         }
-        if (filesListContainsPath(file.getAbsolutePath())){
+        if (filesListContainsPath(Paths.get(file.getAbsolutePath()))){
             throw new FileAlreadyExistException();
         } else {
             this.filesList.add(file);
@@ -60,7 +63,7 @@ public class FilesListManager {
      */
     public void removeFile(Path sourcePath){
         for (int i = 0; i < filesList.size(); i++) {
-            if (filesList.get(i).getAbsolutePath().equals(sourcePath)){
+            if (filesList.get(i).getAbsolutePath().equals(sourcePath.toString())){
                 ConsoleHelper.writeMessage(String.format("Файл %s удален.", filesList.get(i).getAbsolutePath()));
                 filesList.remove(i);
                 return;
@@ -87,9 +90,10 @@ public class FilesListManager {
         return filesList;
     }
 
+    /** If list contains such absolute path*/
     public boolean filesListContainsPath(Path sourcePath){
         for (FileProperties file : filesList) {
-            if (file.getAbsolutePath().equals(sourcePath)){
+            if (file.getAbsolutePath().equals(sourcePath.toString())){
                 return true;
             }
         }

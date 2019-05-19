@@ -1,24 +1,20 @@
-package client;
+package common;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * The class will store data about the object.
- * file name
- * file size
- * absolute path
- * add time
- * Is there a file on the disk at the moment?
- * TODO Delete Path - Serialization
+ * The class will store data about the file.
  */
-public class FileProperties {
+public class FileProperties implements Serializable {
     private String name;
     private long size;
-    private Path absolutePath;
+    private String absolutePath;
     private Date timeWhenAdd;
     private boolean fileExist;
 
@@ -26,12 +22,12 @@ public class FileProperties {
      * With the help of The constructor adds a file,
      * the properties of that are stored in the database
      */
-    public FileProperties(String name, long size, Path absolutePath, Date timeWhenAdd) {
+    public FileProperties(String name, long size, String absolutePath, Date timeWhenAdd) {
         this.name = name;
         this.size = size;
         this.absolutePath = absolutePath;
         this.timeWhenAdd = timeWhenAdd;
-        if(Files.notExists(absolutePath)){
+        if(Files.notExists(Paths.get(absolutePath))){
             fileExist = false;
         } else {
             fileExist = true;
@@ -42,9 +38,9 @@ public class FileProperties {
      * With the help of The constructor adds a file,
      * which user write on console
      */
-    public FileProperties(Path sourcePath) throws IOException {
-        this.name = sourcePath.getFileName().toString();
-        this.size = Files.size(sourcePath);
+    public FileProperties(String sourcePath) throws IOException {
+        this.name = Paths.get(sourcePath).getFileName().toString();
+        this.size = Files.size(Paths.get(sourcePath));
         this.absolutePath = sourcePath;
         this.timeWhenAdd = new Date();
         this.fileExist = true;
@@ -55,11 +51,11 @@ public class FileProperties {
      * @throws IOException
      */
     public void refresh() throws IOException {
-        if(Files.notExists(absolutePath)){
+        if(Files.notExists(Paths.get(absolutePath))){
             fileExist = false;
         } else {
             fileExist = true;
-            this.size = Files.size(absolutePath);
+            this.size = Files.size(Paths.get(absolutePath));
         }
     }
 
@@ -71,7 +67,7 @@ public class FileProperties {
         return size;
     }
 
-    public Path getAbsolutePath() {
+    public String getAbsolutePath() {
         return absolutePath;
     }
 
@@ -90,11 +86,9 @@ public class FileProperties {
         builder.append(changeStringLength(((size / 1024) + " "), 8));
         builder.append(" Kb, ");
         builder.append("absolute path: ");
-        builder.append(changeStringLength(absolutePath.toString(), 32));
+        builder.append(changeStringLength(absolutePath, 32));
         builder.append(", when added: ");
-        String pattern = "yyyy.MM.dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(timeWhenAdd);
+        String date = Constants.simpleDateFormat.format(timeWhenAdd);
         builder.append(changeStringLength(date, 20));
         builder.append(" file exist: ");
         builder.append(isFileExist());

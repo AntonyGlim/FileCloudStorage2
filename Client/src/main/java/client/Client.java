@@ -4,69 +4,64 @@ import common.ConsoleHelper;
 import common.Message;
 import common.MessageType;
 import common.exception.InvalidInputFormatException;
+import common.exception.PathIsNotFoundException;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.sql.SQLException;
 
+/**
+ * Main class with main loop
+ */
 public class Client {
 
     private static int clientName;
     private static volatile boolean clientConnected = false;
     private static ConnectionManager connectionManager;
 
-    public static int getClientName() {
-        return clientName;
-    }
 
     static {
         try {
             connect();
             while (!clientConnected){
-                ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
+                ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2).");
                 try {
-//                    int i = ConsoleHelper.readInt();
-                    int i = 2;  //TODO delete this
+                    int i = ConsoleHelper.readInt();
+//                    int i = 2; //TODO delete this
                     if (i == 1) registration();
                     else if (i == 2) authorization();
                     else throw new InvalidInputFormatException();
                 } catch (InvalidInputFormatException e){
-                    ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
+                    ConsoleHelper.writeError("Пожалуйста, выберите из предложенного списка.");
+                } catch (PathIsNotFoundException e) {
+                    ConsoleHelper.writeError("База данных повреждена, или отсутствует.");
+                } catch (SQLException e) {
+                    ConsoleHelper.writeError("Не удалось подключиться к базе данных.");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            ConsoleHelper.writeError("Не удалось подключиться. Сервер не доступен.");
+        } catch (InvalidInputFormatException e){
+            ConsoleHelper.writeError("Проверьте адрес сервера и адрес порта.");
         }
 
     }
 
-    public static void main(String[] args) throws Exception {
-        //authorization block
-//        Client client = new Client();
-//        client.connect();
-//        while (!client.clientConnected){
-//            ConsoleHelper.writeMessage("\nЗарегистрируйтесь(1) или выполните вход(2)");
-//            try {
-//                int i = ConsoleHelper.readInt();
-//                if (i == 1) client.registration();
-//                else if (i == 2) client.authorization();
-//                else throw new InvalidInputFormatException();
-//            } catch (InvalidInputFormatException e){
-//                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
-//            }
-//        }
 
+    public static void main(String[] args) throws Exception {
         //main loop block
-        ClientOperation operation = null;
-        do {
-            try {
-                operation = askOperation();
-                CommandExecutor.execute(operation);
-            } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e){
-                ConsoleHelper.writeMessage("Пожалуйста, выберите из предложенного списка");
-            }
-        } while (operation != ClientOperation.EXIT);
+        if (clientConnected) {
+            ClientOperation operation = null;
+            do {
+                try {
+                    operation = askOperation();
+                    CommandExecutor.execute(operation);
+                } catch (InvalidInputFormatException | ArrayIndexOutOfBoundsException e) {
+                    ConsoleHelper.writeError("Пожалуйста, выберите из предложенного списка");
+                }
+            } while (operation != ClientOperation.EXIT);
+        }
     }
 
 
@@ -78,15 +73,21 @@ public class Client {
      * @throws ArrayIndexOutOfBoundsException
      */
     public static ClientOperation askOperation() throws IOException, InvalidInputFormatException, ArrayIndexOutOfBoundsException {
-        ConsoleHelper.writeMessage("");
-        ConsoleHelper.writeMessage("Выберите операцию:");
-        ConsoleHelper.writeMessage(String.format("\t %d - добавить файл в список файлов для отправки", ClientOperation.ADD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - удалить файл из списка файлов для отправки", ClientOperation.REMOVE.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - просмотреть ссписок файлов для отправки", ClientOperation.CONTENT.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - обновить ссписок файлов для отправки", ClientOperation.REFRESH.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - отправить файл на сервер", ClientOperation.UPLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - загрузить файл с сервера", ClientOperation.DOWNLOAD.ordinal()));
-        ConsoleHelper.writeMessage(String.format("\t %d - выход", ClientOperation.EXIT.ordinal()));
+        ConsoleHelper.writeMessage(              "");
+        ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
+        ConsoleHelper.writeMessage(              "| Выберите операцию:                                 |");
+        ConsoleHelper.writeMessage(String.format("|\t %d - добавить файл в список файлов для отправки  |", ClientOperation.ADD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл из списка файлов для отправки  |", ClientOperation.REMOVE.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - просмотреть список файлов для отправки      |", ClientOperation.CONTENT.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - обновить список файлов для отправки         |", ClientOperation.REFRESH.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - отправить файл на сервер                    |", ClientOperation.UPLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - отправить все файлы из списка на сервер     |", ClientOperation.UPLOAD_ALL.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - загрузить файл с сервера                    |", ClientOperation.DOWNLOAD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - загрузить все файлы с сервера               |", ClientOperation.DOWNLOAD_ALL.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - список файлов на сервере                    |", ClientOperation.FILE_LIST.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - удалить файл на сервере                     |", ClientOperation.DELETE_FILE_FROM_SERVER.ordinal()));
+        ConsoleHelper.writeMessage(String.format("|\t %d - выход                                      |", ClientOperation.EXIT.ordinal()));
+        ConsoleHelper.writeMessage(              "+----------------------------------------------------+");
         return ClientOperation.values()[ConsoleHelper.readInt()];
     }
 
@@ -117,13 +118,14 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static void authorization() throws IOException, ClassNotFoundException {
+    private static void authorization() throws IOException, ClassNotFoundException, PathIsNotFoundException, SQLException {
         int clientName = getUserName().hashCode();
         int clientPassword = getUserPassword().hashCode();
         connectionManager.send(new Message(MessageType.AUTHORIZATION, (clientName + " " + clientPassword)));
         Message message = connectionManager.receive();
         if (message.getType() == MessageType.AUTHORIZATION_OK) {
             clientConnected = true;
+            DBManager.returnFilesListFromDB();
             Client.clientName = clientName;
             ConsoleHelper.writeMessage(message.getText());
         }
@@ -138,7 +140,7 @@ public class Client {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static void connect() throws IOException, ClassNotFoundException {
+    private static void connect() throws IOException, ConnectException, InvalidInputFormatException {
         String serverAddress = getServerAddress();
         int serverPort = getServerPort();
         connectionManager = ConnectionManager.getConnectionManager(new Socket(serverAddress, serverPort));
@@ -147,17 +149,17 @@ public class Client {
 
     protected static String getServerAddress() throws IOException {
         ConsoleHelper.writeMessage("Введите адрес сервера");
-//        String address = ConsoleHelper.readString();
-        String address = "localhost";                               //TODO delete this
+        String address = ConsoleHelper.readString();
+//        String address = "localhost"; //TODO delete this
         ConsoleHelper.writeMessage(address);
         return address;
     }
 
 
-    protected static int getServerPort() throws IOException {
+    protected static int getServerPort() throws IOException, InvalidInputFormatException {
         ConsoleHelper.writeMessage("Введите адрес порта");
-//        int port = ConsoleHelper.readInt();
-        int port = 7777;                                            //TODO delete this
+        int port = ConsoleHelper.readInt();
+//        int port = 7777; //TODO delete this
         ConsoleHelper.writeMessage(Integer.toString(port));
         return port;
     }
@@ -166,7 +168,7 @@ public class Client {
     protected static String getUserName() throws IOException {
         ConsoleHelper.writeMessage("Введите имя пользователя");
         String userName = ConsoleHelper.readString();
-//        String userName = "Sam1";                                 //TODO delete this
+//        String userName = "2"; //TODO delete this
         ConsoleHelper.writeMessage(userName);
         return userName;
     }
@@ -175,7 +177,7 @@ public class Client {
     protected static String getUserPassword() throws IOException {
         ConsoleHelper.writeMessage("Введите пароль");
         String userPassword = ConsoleHelper.readString();
-//        String userPassword = "Password1";                        //TODO delete this
+//        String userPassword = "2"; //TODO delete this
         ConsoleHelper.writeMessage(userPassword);
         return userPassword;
     }

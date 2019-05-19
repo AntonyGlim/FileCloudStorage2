@@ -3,8 +3,7 @@ package command;
 import client.FilesListManager;
 
 /**
- * Каждая команда должна иметь метод void execute()
- * TODO возможно перенести его в общий модуль
+ * Each command must have a method void execute()
  */
 public interface Command {
     void execute() throws Exception;

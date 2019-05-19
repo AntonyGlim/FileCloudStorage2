@@ -1,36 +1,33 @@
 package client;
 
 import common.ConsoleHelper;
+import common.FileProperties;
 import common.exception.PathIsNotFoundException;
 
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Date;
 
 import static client.FilesListManager.getFilesListManager;
 
 /**
- * Класс будет отвечать за работу с базой данных
+ * Work with DB.
+ * All public methods has own connect() and disconnect().
+ * In DB stored information about list of files names which is on the user side,
+ * when user stop working with program.
  */
 public class DBManager {
     private static Connection connection;
     private static Statement statement;
     private static String tableName = "fileslist";
 
-    /**
-     * Устанавливаем соединение с БД
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
+    /** Database connection */
     public static void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:Client/src/main/java/database/files.db");
         statement = connection.createStatement();
     }
 
-    /**
-     * Закрываем соединение с БД
-     */
+    /** Database disconnection */
     public static void disconnect(){
         try {
             connection.close();
@@ -39,14 +36,7 @@ public class DBManager {
         }
     }
 
-    /**
-     * Метод добавляет запись в таблицу
-     * @param name
-     * @param size
-     * @param absolutePath
-     * @param timeWhenAdd
-     * @throws SQLException
-     */
+    /** Add an entry to the table */
     public static void insertIntoTable(String name, long size, String absolutePath, long timeWhenAdd) throws SQLException {
         try {
             connect();
@@ -60,10 +50,7 @@ public class DBManager {
         }
     }
 
-    /**
-     * Метод вернет FilesListManager, который сформирует из БД.
-     * @throws SQLException
-     */
+    /** Return FilesListManager from DB */
     public static FilesListManager returnFilesListFromDB() throws SQLException, PathIsNotFoundException {
         FilesListManager filesListManager = getFilesListManager();;
         try {
@@ -74,7 +61,7 @@ public class DBManager {
                 filesListManager.addFileFromDB(new FileProperties(
                         rs.getString(2),
                         rs.getLong(3),
-                        Paths.get(rs.getString(4)),
+                        rs.getString(4),
                         new Date(rs.getLong(5))
                 ));
             }
@@ -86,10 +73,7 @@ public class DBManager {
         return filesListManager;
     }
 
-    /**
-     * Метод удаляет все данные из таблицы.
-     * @throws SQLException
-     */
+    /** Delete all from table*/
     public static void deleteAllFromTable() throws SQLException {
         try {
             connect();
