@@ -129,7 +129,7 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                         byte[] buffer = new byte[bufferLength];
                         int i = 0;
                         while (fileInputStream.available() > 0) {
-                            System.out.println(i); //TODO delete this
+//                            System.out.println(i); //TODO delete this
                             int count = fileInputStream.read(buffer);
                             if (count == bufferLength) {
                                 ctx.writeAndFlush(new Message(
